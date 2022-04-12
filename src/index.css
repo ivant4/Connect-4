@@ -1,13 +1,170 @@
+/* ==== Variables ==== */
+:root {
+  --primaryColour: #75cbf3;
+  --marginLeftOfColCursor: 30px;
+}
+
+/* ==== Global styles ==== */
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #eeeeee;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+/* other element specific styles such as btn/modal styling */
+/* ==== Toolbar ==== */
+.toolbar {
+  border-bottom: 3px solid var(--primaryColour);
+  display: flex;
+}
+
+.toolbar-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #ff8f00;
+  width: 50vw;
+}
+
+.toolbar-settings {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 40vw;
+}
+
+.toolbar-setting:hover {
+  background-color: var(--primaryColour);
+}
+
+/* ==== GameSection ==== */
+.game-section {
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  margin-top: 0px;
+}
+
+.game-container {
+  background-color: antiquewhite;
+  width: 760px;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: 1fr 7fr;
+}
+
+/* ==== Column Cursor ==== */
+.column-cursor {
+  grid-column: 1/7;
+  grid-row: 1;
+  position: relative;
+  margin-top: 15px;
+  border-style: solid;
+  margin-left: var(--marginLeftOfColCursor);
+  border-width: 55px 50px 0px 50px;
+  border-color: black transparent transparent transparent;
+  height: 0px;
+  width: 0px;
+}
+
+/* ==== Gameboard ==== */
+.gameboard {
+  grid-column: 1/7;
+  grid-row: 2;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  width: 700px;
+  height: 600px;
+  padding: 30px;
+  box-shadow: inset 0 0 0 31px var(--primaryColour);
+  border-radius: 3%;
+  z-index: 2;
+}
+
+.game-cell {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.empty-disk-space {
+  width: 80px;
+  height: 80px;
+  box-shadow: 0 0 0 100px var(--primaryColour);
+  border-radius: 50%;
+}
+.disk {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  z-index: -1;
+}
+.player-one {
+  background-color: red;
+}
+.player-two {
+  background-color: yellow;
+}
+
+@media screen and (max-width: 1000px) {
+  :root {
+    --marginLeftOfColCursor: 20px;
+  }
+  .column-cursor {
+    margin-left: var(--marginLeftOfColCursor);
+    border-width: 40px 35px 0px 35px;
+  }
+  .game-container {
+    width: 530px;
+  }
+  .gameboard {
+    width: 490px;
+    height: 420px;
+    padding: 20px;
+    box-shadow: inset 0 0 0 21px var(--primaryColour);
+  }
+  .empty-disk-space {
+    width: 55px;
+    height: 55px;
+  }
+  .disk {
+    width: 55px;
+    height: 55px;
+    z-index: -1;
+  }
+}
+/* ==== Utility ==== */
+
+/* ==== Modal ==== */
+.modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  z-index: 2;
+}
+
+.modal-content {
+  background: white;
+  width: 70vw;
+  padding: 3rem;
+  border-radius: 0.25rem;
+  text-align: center;
 }

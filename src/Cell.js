@@ -1,9 +1,10 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useGameContext } from './GameContext';
 import { isLegalMove } from './GameLogic';
 
 
 const diskColour = {
+    0: "empty",
     1: "player-one",
     2: "player-two",
 };
@@ -17,20 +18,31 @@ const Cell = ({cellState, cellIndex}) => {
         isGameOver,
         colCursor,
         setCurrentCol,
+        cellIndexOfNewDisk,
     } = useGameContext();
 
     const cellRef = useRef();
+    const isAnimating = cellIndexOfNewDisk === cellIndex;
+    // renders one of new disk or fixed disk
 
-    // need a way to keep track when this cell is first filled with a disk 
-    // so this can be rendered with animation
-
+    const updateNewDiskAnimation = () => {
+        // sets the top position and animation duration of the falling-disk animation 
+        const rowOfNewDisk = Math.floor(cellIndexOfNewDisk / 7);
+        const boundingRectOfCell = cellRef.current.getBoundingClientRect();
+        const cellHeight = boundingRectOfCell.height;
+        const topOfNewDiskAtStart = boundingRectOfCell.top - ((rowOfNewDisk) * cellHeight);
+        const topOfNewDiskAtFinish = boundingRectOfCell.top;
+        const fallingDistOfNewDisk = topOfNewDiskAtFinish - topOfNewDiskAtStart;
+        const fallDuration = 0.02*Math.sqrt(fallingDistOfNewDisk);
+        // falling distance is proportional to time^2 
+        document.documentElement.style.setProperty('--startTopOfNewDisk', `${topOfNewDiskAtStart}px`);
+        document.documentElement.style.setProperty('--finishTopOfNewDisk', `${topOfNewDiskAtFinish}px`);
+        document.documentElement.style.setProperty('--fallDuration', `${fallDuration}s`);
+    };
 
     const selectNewDiskCol = async() => {
         const colOfNewDisk = cellIndex % 7;
         if (isLegalMove(boardState, colOfNewDisk) && (!isGameOver)) {
-            // right now this is returning the diskref that you are clicking
-            // not the cell with the new disk !!
-            console.log(cellRef.current.getBoundingClientRect());
             setColOfNewDisk(colOfNewDisk);
             await setMoveCounter(moveCounter + 1);
             // wait for setMoveCounter to finish before useEffect in GameContext 
@@ -45,14 +57,25 @@ const Cell = ({cellState, cellIndex}) => {
         }
     };
 
+    useEffect(() => {
+        if (isAnimating) {
+            updateNewDiskAnimation();
+        }
+    }, [cellIndexOfNewDisk]);
+
     return (
         <div 
         className='game-cell'
         onClick={selectNewDiskCol}
         onMouseOver={updateColCursor}
+        ref={cellRef}
         >
-            <div ref={cellRef} className={`empty-disk-space`}/>
-            {!cellState || <div className={`disk ${diskColour[cellState]}`}/>}
+            <div 
+            className={`empty-disk-space`} 
+            />
+            <div 
+            className={`${isAnimating ? "new-disk":"fixed-disk"} ${diskColour[cellState]}`}
+            />
         </div>
     );
 }

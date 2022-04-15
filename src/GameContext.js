@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {
     isLegalMove, 
     findRowOfNewDisk, 
@@ -16,25 +16,29 @@ for (let i = 0; i < 6; i++) {
 
 const GameContextProvider = ({children}) => {
     // the children being passed in is the app component!!!
+    // do all of these variables need to be useState or can they be useRef ? activePlayerNum, boardState
     const [boardState, setBoardState] = useState(initialBoardState.map(elem => [...elem]));
     const [activePlayerNum, setActivePlayerNum] = useState(1);
     const [colOfNewDisk, setColOfNewDisk] = useState(0);
-    const [winningPlayerNum, setWinningPlayerNum] = useState(0);
     const [isGameOver, setIsGameOver] = useState(false);
     const [moveCounter, setMoveCounter] = useState(0);
     const [currentCol, setCurrentCol] = useState(0);
+
+    const cellIndexOfNewDisk = useRef();
+    const winningPlayerNum = useRef(0);
 
     useEffect(() => {
         if (moveCounter === 0) return; // during inital render and game resets
         const rowOfNewDisk = findRowOfNewDisk(boardState, colOfNewDisk);
         boardState[rowOfNewDisk][colOfNewDisk] = activePlayerNum;
+        cellIndexOfNewDisk.current = (rowOfNewDisk * 7) + colOfNewDisk;
         setBoardState(boardState);
         if (hasActivePlayerWon(
             boardState, 
             activePlayerNum, 
             [rowOfNewDisk, colOfNewDisk]
-        )) { 
-            setWinningPlayerNum(activePlayerNum);
+        )) {
+            winningPlayerNum.current = activePlayerNum; 
             setIsGameOver(true);
         } else if (moveCounter >= 42) { 
             // Draw
@@ -50,7 +54,8 @@ const GameContextProvider = ({children}) => {
         setBoardState(initialBoardState.map(elem => [...elem]));
         setMoveCounter(0);
         setIsGameOver(false);
-        setWinningPlayerNum(0);
+        winningPlayerNum.current = 0;
+        cellIndexOfNewDisk.current = undefined;
     };
     
     return <GameContext.Provider value={{
@@ -60,11 +65,12 @@ const GameContextProvider = ({children}) => {
         setColOfNewDisk,
         moveCounter, 
         setMoveCounter,
-        winningPlayerNum,
         isGameOver,
         resetGame,
         currentCol,
         setCurrentCol,
+        cellIndexOfNewDisk: cellIndexOfNewDisk.current,
+        winningPlayerNum: winningPlayerNum.current,
     }}> 
         {children}
     </GameContext.Provider>

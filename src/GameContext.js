@@ -16,14 +16,12 @@ for (let i = 0; i < 6; i++) {
 
 const GameContextProvider = ({children}) => {
     // the children being passed in is the app component!!!
-    // do all of these variables need to be useState or can they be useRef ? activePlayerNum, boardState
     const [boardState, setBoardState] = useState(initialBoardState.map(elem => [...elem]));
     const [activePlayerNum, setActivePlayerNum] = useState(1);
     const [colOfNewDisk, setColOfNewDisk] = useState(0);
     const [isGameOver, setIsGameOver] = useState(false);
     const [moveCounter, setMoveCounter] = useState(0);
     const [currentCol, setCurrentCol] = useState(0);
-
     const cellIndexOfNewDisk = useRef();
     const winningPlayerNum = useRef(0);
 
@@ -49,11 +47,12 @@ const GameContextProvider = ({children}) => {
         }
     }, [moveCounter]);
 
-    const resetGame = () => {
+    const resetGame = async () => {
+        await setIsGameOver(false); 
+        // to prevent the gameover Modal from updating to an incorrect message
         setActivePlayerNum(1);
         setBoardState(initialBoardState.map(elem => [...elem]));
         setMoveCounter(0);
-        setIsGameOver(false);
         winningPlayerNum.current = 0;
         cellIndexOfNewDisk.current = undefined;
     };

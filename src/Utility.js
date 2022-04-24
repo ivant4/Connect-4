@@ -1,16 +1,13 @@
-import React from 'react';
+import React, {useState} from 'react';
+import TurnIndicator from './TurnIndicator';
 import { useGameContext } from './GameContext';
 
 const Utility = () => {
-    const {
-        activePlayerNum,
-        resetGame
-    } = useGameContext();
-
+    const {resetGame} = useGameContext();
     return (
         <div className='utility'>
-            <button onClick={resetGame}>Reset</button>
-            <h2>Player {activePlayerNum}'s Turn</h2>
+            <TurnIndicator/>
+            <button className='btn reset-btn' onClick={resetGame}>Reset</button>
         </div>
     );
 };

@@ -9,28 +9,28 @@ const Toolbar = () => {
     const revealRulesModal = () => {
         console.log("this works!!!");
     };
-
     return (
-        <div className='toolbar'>
-            <div className='toolbar-title'>
-                <h2>Connect 4</h2>
-            </div>
-            <div className='toolbar-settings'>
-                <h3 
-                className='toolbar-setting' 
-                onClick={revealDisplayModal}
-                >
-                        Rules
-                </h3>
-                <h3 
-                className='toolbar-setting'
-                onClick={revealRulesModal}
-                >
-                    Display
-                </h3>
+        <div className='toolbar-container'>
+            <div className='toolbar'>
+                <div className='toolbar-title'>
+                    <h2>Connect 4</h2>
+                </div>
+                <div className='toolbar-settings'>
+                    <div 
+                    className='toolbar-setting' 
+                    onClick={revealRulesModal}
+                    >
+                        <h2>Rules</h2> 
+                    </div>
+                    <div 
+                    className='toolbar-setting'
+                    onClick={revealDisplayModal}
+                    >
+                        <h2>Display</h2> 
+                    </div>
+                </div>
             </div>
         </div>
-        
     );
 };
 

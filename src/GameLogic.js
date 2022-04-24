@@ -15,6 +15,7 @@ const findRowOfNewDisk = (boardState, col) => {
 };
 
 const isWithinGameboard = (boardState, row, col) => {
+    // if the coordinate 
     return (
         row < boardState.length && row >= 0 &&
         col < boardState[0].length && col >= 0

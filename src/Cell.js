@@ -26,7 +26,7 @@ const Cell = ({cellState, cellIndex}) => {
     // renders one of new disk or fixed disk
 
     const updateNewDiskAnimation = () => {
-        // sets the top position and animation duration of the falling-disk animation 
+        // sets the top margin and animation duration of the falling-disk animation 
         const rowOfNewDisk = Math.floor(cellIndexOfNewDisk / 7);
         const boundingRectOfCell = cellRef.current.getBoundingClientRect();
         const cellHeight = boundingRectOfCell.height;

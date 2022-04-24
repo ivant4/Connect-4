@@ -15,50 +15,79 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #eeeeee;
+  background-color: #f2f2f2;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
-
+.btn {
+  font-family: source-code-pro,
+  Menlo,
+  Monaco,
+  Consolas,
+  "Courier New",
+  monospace;
+  padding: 5px;
+  font-size: 22px;
+  font-weight: bold;
+}
 /* other element specific styles such as btn/modal styling */
+
 /* ==== Toolbar ==== */
-.toolbar {
-  border-bottom: 3px solid var(--primaryColour);
+.toolbar-container {
   display: flex;
+  justify-content: center;
+  width: 100%;
+  box-shadow: 0px 3px 5px 0px var(--primaryColour);
+  margin-bottom: 50px;
+}
+.toolbar {
+  display: flex;
+  max-width: 1000px;
+  min-width: 600px;
 }
 
 .toolbar-title {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: start;
   color: #ff8f00;
   width: 50vw;
+  font-size: 18px;
 }
 
 .toolbar-settings {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  width: 40vw;
+  max-width: 500px;
+  min-width: 300px;
 }
-
+.toolbar-setting {
+  height: 100%;
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  border-radius: 3%;
+}
 .toolbar-setting:hover {
-  background-color: var(--primaryColour);
+  text-decoration: underline;
+  background-color: #ddd;
 }
 
 /* ==== GameSection ==== */
 .game-section {
-  background-color: white;
+  background-color: #f2f2f2;
   display: flex;
+  /* width: minmax(); */
   justify-content: center;
+  align-items: center;
   margin-top: 0px;
 }
 
 .game-container {
-  background-color: antiquewhite;
   width: 760px;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -161,27 +190,51 @@ code {
     z-index: -1;
   }
 }
-/* ==== Utility ==== */
 
-/* ==== Modal ==== */
+/* Utility */
+.utility {
+  display: flex;
+  flex-direction: column;
+  margin-left: 2vw;
+}
+
+.turn-indicator {
+  background-color: rgba(117, 66, 252, 0.35);
+  padding: 5px 30px 20px 30px;
+  border-radius: 5%;
+  text-align: center;
+  margin-bottom: 20px;
+}
+.player-counter {
+  position: relative;
+  margin: 0px;
+  z-index: 1;
+}
+/* ==== Modal ==== 75cbf3*/
 .modal-container {
+  background: rgba(0, 0, 0, 0.75);
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.75);
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 1;
   z-index: 2;
+  visibility: hidden;
+  transition-delay: 0.6s;
 }
 
 .modal-content {
   background: white;
-  width: 70vw;
-  padding: 3rem;
+  width: 500px;
+  padding: 60px;
   border-radius: 0.25rem;
   text-align: center;
+}
+
+.is-open {
+  visibility: visible;
 }

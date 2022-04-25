@@ -1,32 +1,26 @@
 import React from 'react'
-import { useGameContext } from '../GameContext';
 
-const GameOverModal = () => {
-    const {
-        winningPlayerNum,
-        isGameOver,
-        resetGame,
-    } = useGameContext();
-
+const DisplayModal = ({setshowDisplayModal}) => {
+    // make a toggle button and add dark theme option 
+    const closeDisplayModal = () => {
+        setshowDisplayModal(false);
+    }
     return (
-        <div className={`modal-container ${isGameOver && "is-open"}`}>
+        <div className="modal-container is-open">
+
             <div className='modal-content'>
-                <h2>
-                    Well played ! 
-                    {
-                        winningPlayerNum === 0 ? " It's a draw!":
-                        ` Player ${winningPlayerNum} has won the game!`
-                    }
-                </h2>
                 <button 
-                    className='btn' 
-                    onClick={resetGame}
+                className='btn exit-btn' 
+                onClick={closeDisplayModal}
                 >
-                    Play Again
+                    x
                 </button>
+                <h2>
+                    Display Setting
+                </h2>
             </div>
         </div>
     );
 }
 
-export default GameOverModal;
+export default DisplayModal;

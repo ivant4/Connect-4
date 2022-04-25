@@ -1,32 +1,27 @@
 import React from 'react'
-import { useGameContext } from '../GameContext';
 
-const GameOverModal = () => {
-    const {
-        winningPlayerNum,
-        isGameOver,
-        resetGame,
-    } = useGameContext();
-
+const RulesModal = ({setshowRulesModal}) => {
+    const closeRulesModal = () => {
+        setshowRulesModal(false);
+    }
     return (
-        <div className={`modal-container ${isGameOver && "is-open"}`}>
+        <div className="modal-container is-open">
             <div className='modal-content'>
-                <h2>
-                    Well played ! 
-                    {
-                        winningPlayerNum === 0 ? " It's a draw!":
-                        ` Player ${winningPlayerNum} has won the game!`
-                    }
-                </h2>
                 <button 
-                    className='btn' 
-                    onClick={resetGame}
+                className='btn exit-btn' 
+                onClick={closeRulesModal}
                 >
-                    Play Again
+                    x
                 </button>
+                <p>
+                    The aim of the game is to be the first player to 
+                    form a horizontal, vertical or diagonal row of 4 disks
+                    with each player taking turns dropping a disk into the
+                    grid. 
+                </p>
             </div>
         </div>
     );
 }
 
-export default GameOverModal;
+export default RulesModal;

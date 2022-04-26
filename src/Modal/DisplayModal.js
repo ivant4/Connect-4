@@ -7,17 +7,21 @@ const DisplayModal = ({setshowDisplayModal}) => {
     }
     return (
         <div className="modal-container is-open">
-
             <div className='modal-content'>
-                <button 
-                className='btn exit-btn' 
-                onClick={closeDisplayModal}
-                >
-                    x
-                </button>
-                <h2>
-                    Display Setting
-                </h2>
+                <div className='modal-header'>
+                    <h2 className='modal-heading'>
+                        Display Settings
+                    </h2>
+                    <button 
+                    className='btn exit-btn' 
+                    onClick={closeDisplayModal}
+                    >
+                        x
+                    </button>
+                </div>
+                <div className="display setting">
+                    <h3>Dark Theme</h3>
+                </div>
             </div>
         </div>
     );

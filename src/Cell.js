@@ -34,7 +34,7 @@ const Cell = ({cellState, cellIndex}) => {
         const topOfNewDiskAtFinish = boundingRectOfCell.top;
         const fallingDistOfNewDisk = topOfNewDiskAtFinish - topOfNewDiskAtStart;
         const fallDuration = 0.02*Math.sqrt(fallingDistOfNewDisk);
-        // falling distance is proportional to time^2 
+        // falling distance is proportional to the square of the falling duration 
         document.documentElement.style.setProperty('--startTopOfNewDisk', `${topOfNewDiskAtStart}px`);
         document.documentElement.style.setProperty('--finishTopOfNewDisk', `${topOfNewDiskAtFinish}px`);
         document.documentElement.style.setProperty('--fallDuration', `${fallDuration}s`);

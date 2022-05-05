@@ -1,11 +1,11 @@
 import React from 'react'
 
-const RulesModal = ({setshowRulesModal}) => {
+const RulesModal = ({ showRulesModal, setshowRulesModal}) => {
     const closeRulesModal = () => {
         setshowRulesModal(false);
     }
     return (
-        <div className="modal-container is-open">
+        <div className={`modal-container ${showRulesModal && "is-open"}`}>
             <div className='modal-content'>
                 <div className='modal-header'>
                     <h2 className='modal-heading'>

@@ -9,7 +9,7 @@ const GameOverModal = () => {
     } = useGameContext();
 
     return (
-        <div className={`modal-container ${isGameOver && "is-open"}`}>
+        <div className={`modal-container ${isGameOver && "is-open game-over-modal"}`}>
             <div className='modal-content'>
                 <h2>
                     Well played ! 

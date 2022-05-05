@@ -1,6 +1,16 @@
 /* ==== Variables ==== */
 :root {
   --primaryColour: #75cbf3;
+  --secondaryColour: #ff8f00;
+  --textColour: black;
+  --toolbarBgColour: white;
+  --backgroundColour: #f9f9f9;
+  --colCursorColour: black;
+  --player1Colour: red;
+  --player2Colour: yellow;
+  --turnIndicatorColour: #cccccc;
+
+  /* === disk animation related variables ===*/
   --marginLeftOfColCursor: 30px;
   --startTopOfNewDisk: 0px;
   --finishTopOfNewDisk: 500px;
@@ -15,7 +25,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f9f9f9;
+  background-color: var(--backgroundColour);
 }
 
 code {
@@ -42,7 +52,9 @@ code {
   width: 100%;
   box-shadow: 0px 1px 3px 0px var(--primaryColour);
   margin-bottom: 50px;
-  background-color: white;
+  background-color: var(--toolbarBgColour);
+  color: var(--textColour);
+  background-color: var(--toolbarBgColour);
 }
 
 .toolbar {
@@ -55,7 +67,7 @@ code {
   display: flex;
   align-items: center;
   justify-content: start;
-  color: #ff8f00;
+  color: var(--secondaryColour);
   width: 50vw;
   font-size: 18px;
 }
@@ -79,7 +91,14 @@ code {
   border-bottom: 3px solid black;
   background-color: #dddddd;
 }
-
+.setting {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 20%;
+  width: 60%;
+  height: 50px;
+}
 .exit-btn {
   border-radius: 40%;
   width: 22.5px;
@@ -89,6 +108,28 @@ code {
   line-height: 0;
   font-size: 18px;
 }
+
+.toggle-btn {
+  border: black 2px solid;
+  width: 50px;
+  height: 25px;
+  border-radius: 25px;
+  background-color: #ccc;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+.on-toggle-btn {
+  justify-content: end;
+  background-color: var(--primaryColour);
+}
+.toggle-knob {
+  background-color: white;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+}
+
 /* ==== GameSection ==== */
 .game-section {
   display: flex;
@@ -113,7 +154,7 @@ code {
   border-style: solid;
   margin-left: var(--marginLeftOfColCursor);
   border-width: 55px 50px 0px 50px;
-  border-color: black transparent transparent transparent;
+  border-color: var(--colCursorColour) transparent transparent transparent;
   height: 0px;
   width: 0px;
 }
@@ -169,10 +210,10 @@ code {
   background-color: transparent;
 }
 .player-one {
-  background-color: red;
+  background-color: var(--player1Colour);
 }
 .player-two {
-  background-color: yellow;
+  background-color: var(--player2Colour);
 }
 
 @media screen and (max-width: 1000px) {
@@ -207,13 +248,13 @@ code {
 }
 
 .turn-indicator {
-  background-color: #ccc;
+  background-color: var(--turnIndicatorColour);
   padding: 5px 30px 20px 30px;
   border-radius: 5%;
   text-align: center;
   margin-bottom: 20px;
-  border: 1px solid black;
 }
+
 .player-counter {
   position: relative;
   margin: 0px;
@@ -221,7 +262,7 @@ code {
 }
 
 .reset-btn {
-  background-color: #ff8f00;
+  background-color: var(--secondaryColour);
   color: white;
   border-radius: 7%;
   width: 100%;
@@ -243,7 +284,6 @@ code {
   opacity: 1;
   z-index: 3;
   visibility: hidden;
-  transition-delay: 0.6s;
 }
 
 .modal-content {
@@ -268,4 +308,8 @@ code {
 
 .is-open {
   visibility: visible;
+}
+
+.game-over-modal {
+  transition-delay: 0.6s;
 }

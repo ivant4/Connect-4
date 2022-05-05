@@ -35,8 +35,14 @@ const Toolbar = () => {
                     </div>
                 </div>
             </div>
-            {showDisplayModal && <DisplayModal setshowDisplayModal={setshowDisplayModal}/>}
-            {showRulesModal && <RulesModal setshowRulesModal={setshowRulesModal}/>}
+            <DisplayModal 
+            setshowDisplayModal={setshowDisplayModal} 
+            showDisplayModal={showDisplayModal}
+            />
+            <RulesModal 
+            setshowRulesModal={setshowRulesModal} 
+            showRulesModal={showRulesModal}
+            />
         </>
     );
 };

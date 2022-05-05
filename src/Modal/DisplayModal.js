@@ -1,12 +1,14 @@
 import React from 'react'
+import ToggleButton from '../ToggleButton';
+import { toggleDarkTheme } from '../DisplaySettingsController'
 
-const DisplayModal = ({setshowDisplayModal}) => {
-    // make a toggle button and add dark theme option 
+
+const DisplayModal = ({ showDisplayModal, setshowDisplayModal }) => {
     const closeDisplayModal = () => {
         setshowDisplayModal(false);
     }
     return (
-        <div className="modal-container is-open">
+        <div className={`modal-container ${showDisplayModal && "is-open"}`}>
             <div className='modal-content'>
                 <div className='modal-header'>
                     <h2 className='modal-heading'>
@@ -19,8 +21,9 @@ const DisplayModal = ({setshowDisplayModal}) => {
                         x
                     </button>
                 </div>
-                <div className="display setting">
+                <div className="setting">
                     <h3>Dark Theme</h3>
+                    <ToggleButton toggleFunc={toggleDarkTheme}/>
                 </div>
             </div>
         </div>

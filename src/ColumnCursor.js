@@ -23,10 +23,7 @@ const ColumnCursor = () => {
         }
     }, [currentCol]);
     return (
-        <div 
-        className='column-cursor' 
-
-        />
+        <div className='column-cursor'/>
     );
 }
 

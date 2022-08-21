@@ -14,12 +14,12 @@ const themes = {
         primaryColour: "purple",
         secondaryColour: "yellow",
         textColour: "white",
-        toolbarBgColour: "black",
+        toolbarBgColour: "#777",
         backgroundColour: "black",
-        colCursorColour: "white",
+        colCursorColour: "#777",
         player1Colour: "blue",
         player2Colour: "green",
-        turnIndicatorColour: "white",
+        turnIndicatorColour: "#777",
     },
 };
 

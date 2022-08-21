@@ -263,7 +263,7 @@ code {
 
 .reset-btn {
   background-color: var(--secondaryColour);
-  color: white;
+  color: black;
   border-radius: 7%;
   width: 100%;
   padding: 5px;

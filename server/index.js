@@ -1,17 +1,16 @@
-const express = require('express');
-const connectDB = require("./db/connect");
-const {
-    createNewGame,
-    retrieveBoardState,
-    retrieveGameStatus,
-    setBoardState, 
-    incrementActivePlayerCount,
-    decrementActivePlayerCount
-} = require("./Controller/game");
-const mongoose = require('mongoose');
-const process = require("process");
 require("dotenv").config();
+
+const express = require('express');
 const app = express();
+
+const process = require("process");
+
+const connectDB = require("./db/connect");
+const gameStatusRouter = require('./routes/gameStatus');
+const boardStateRouter = require('./routes/boardState');
+
+app.use('/api/game-status', gameStatusRouter);
+app.use('/api/board-state', boardStateRouter);
 
 const start = async (url) => {
     try {
@@ -24,18 +23,5 @@ const start = async (url) => {
         console.log(error);
     }
 };
-
-
-app.get("/api", (req, res) => { // retrieve board state
-    res.json({"users": ["userOne", "userTwo", "userThree"]})
-});
-
-app.post("/api", (req, res) => { // create new game 
-    res.json({"users": ["userOne", "userTwo", "userThree"]})
-});
-
-app.patch("/api", (req, res) => { // update board state or player left
-    res.json({"users": ["userOne", "userTwo", "userThree"]})
-});
 
 start(process.env.MONGO_URI);

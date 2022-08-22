@@ -40,9 +40,9 @@ const gameSchema = new mongoose.Schema({
            validator: isValidBoardState
         }
     },
-    numOfActivePlayers: {
+    activePlayerNumber: {
         type: Number,
-        required: [true, 'The number of active players is not provided!'],
+        required: [true, 'The active player number is not provided!'],
         min: 1,
         max: 2
     },

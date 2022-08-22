@@ -1,4 +1,4 @@
-const gameModel = require("../Models/game");
+const gameModel = require("../models/game");
 
 const initialBoardState = [];
 for (let i = 0; i < 6; i++) {
@@ -53,29 +53,17 @@ const retrieveGameStatus = async (gameId) => {
     return await retrieveGameProp(gameId, "gameStatus");
 };
 
-
-const incrementActivePlayerCount = async (gameId) => {
-    const numOfActivePlayers = retrieveGameProp(gameId, "numOfActivePlayers");
-    if (numOfActivePlayers == 2) { 
-        // TODO: handle when a third player tries to join !!!!
-    } else {
-        await gameModel.findOneAndUpdate(
-            {gameId: gameId}, 
-            {numOfActivePlayers: 2, gameStatus: "playing"}
-        );
-    }
+const setGameStatus = async (gameId, gameStatus) => {
+    await gameModel.findOneAndUpdate({gameId: gameId}, {gameStatus: gameStatus});
 };
 
-const decrementActivePlayerCount = async (gameId) => {
-    const numOfActivePlayers = retrieveGameProp(gameId, "numOfActivePlayers");
-    if (numOfActivePlayers == 1) {
-        await gameModel.deleteOne({gameId: gameId}); 
-    } else {
-        await gameModel.findOneAndUpdate(
-            {gameId: gameId}, 
-            {numOfActivePlayers: 1, gameStatus: "waiting"}
-        );
-    }
+const switchActivePlayer = async (gameId) => {
+    const activePlayerNum = await retrieveGameProp(gameId, "activePlayerNumber");
+    const nextActivePlayerNum = activePlayerNum == 1 ? 2 : 1;
+    await gameModel.findOneAndUpdate(
+        {gameId: gameId}, 
+        {activePlayerNumber: nextActivePlayerNum}
+    );
 };
 
 
@@ -83,7 +71,7 @@ module.exports = {
     createNewGame,
     retrieveBoardState,
     retrieveGameStatus,
-    setBoardState, 
-    incrementActivePlayerCount,
-    decrementActivePlayerCount
+    setBoardState,
+    setGameStatus,
+    switchActivePlayer
 };

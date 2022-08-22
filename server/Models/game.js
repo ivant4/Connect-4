@@ -17,16 +17,16 @@ const isValidBoardState = (boardState) => {
     for (let row = 0; row < boardState.length; row++) {
         for (let col = 0; col < boardState[0].length; col++) {
             cellValue = boardState[row][col];
+            // each cell value should be a number
             if (typeof cellValue !== "number") return false;
             // each cell value should be taken by player 1 or 2 or unoccupied (0)
-            if (cellValue > 2 || 
-                cellValue < 0) {
+            if (cellValue > 2 || cellValue < 0) {
                     return false;
-                }
+            }
         }
     }
     return true
-}
+};
 
 const gameSchema = new mongoose.Schema({
     gameId: {
@@ -40,6 +40,16 @@ const gameSchema = new mongoose.Schema({
            validator: isValidBoardState
         }
     },
+    numOfActivePlayers: {
+        type: Number,
+        required: [true, 'The number of active players is not provided!'],
+        min: 1,
+        max: 2
+    },
+    gameStatus: {
+        type: String,
+        required: [true, "The game status is not provided !"]
+    }
 });
 
 module.exports = mongoose.model('games', gameSchema);

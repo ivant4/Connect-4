@@ -1,18 +1,17 @@
 const express = require('express')
 const router = express.Router()
 
-/*
+
 const {
+    getBoardState,
+    setBoardState
+} = require('../controllers/game');
 
-} = require('../controllers/game')
-*/
+// A player is retrieving the board state and 
+// waiting for their move
+router.route('/').get(getBoardState);
 
-router.route('/').get((req, res) => {
-    res.json({"users": ["userOne", "userTwo", "userThree"]})
-});
+// A player is updating the board state after a move
+router.route('/').patch(setBoardState);
 
-router.route('/').patch((req, res) => {
-    res.json({"users": ["userOne", "userTwo", "userThree"]})
-});
-
-module.exports = router
+module.exports = router;

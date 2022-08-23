@@ -1,18 +1,20 @@
 const express = require('express')
 const router = express.Router()
 
-/*
+
 const {
-
+    createNewGame,
+    getGameStatus,
+    setGameStatus
 } = require('../controllers/game')
-*/
 
-router.route('/').post((req, res) => {
-    res.json({"users": ["userOne", "userTwo", "userThree"]})
-});
+// The host player creates a game
+router.route('/').post(createNewGame);
 
-router.route('/').patch((req, res) => {
-    res.json({"users": ["userOne", "userTwo", "userThree"]})
-});
+// The host player is getting update on game status
+router.route('/').get(getGameStatus);
 
-module.exports = router
+// A player joining or leaving the game
+router.route('/').patch(setGameStatus);
+
+module.exports = router;

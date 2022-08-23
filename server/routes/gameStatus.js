@@ -5,7 +5,7 @@ const router = express.Router()
 const {
     createNewGame,
     getGameStatus,
-    setGameStatus
+    updateGameStatus
 } = require('../controllers/game')
 
 // The host player creates a game
@@ -15,6 +15,6 @@ router.route('/').post(createNewGame);
 router.route('/').get(getGameStatus);
 
 // A player joining or leaving the game
-router.route('/').patch(setGameStatus);
+router.route('/').patch(updateGameStatus);
 
 module.exports = router;

@@ -1,4 +1,4 @@
-const gameModel = require("../models/game");
+const {gameModel, isValidBoardState} = require("../models/game");
 
 const initialBoardState = [];
 for (let i = 0; i < 6; i++) {
@@ -37,9 +37,10 @@ const getGameProp = async (gameProp, req, res, next) => {
         const retrievedGameInfo = (await gameModel.find({gameId}))[0];
         if (retrievedGameInfo) {
             const gamePropFound = retrievedGameInfo[gameProp];
-            res.status(200).json({gameProp: gamePropFound});
+            res.status(200).json({gameProp, value: gamePropFound});
+        } else {
+            throw new TypeError(`Game ID (${gameId}) entered is invalid !`);
         }
-        throw new TypeError(`Game ID (${gameId}) entered is invalid !`);
     } catch (err) { 
         next(err); 
     }
@@ -49,24 +50,58 @@ const getBoardState = async (req, res, next) => {
     await getGameProp("boardState", req, res, next);
 };
 
-const setBoardState = async (req, res) => {
-    const {boardState: newBoardState, gameId} = req.body;
-    await gameModel.findOneAndUpdate({gameId}, {boardState: newBoardState});
-    res.sendStatus(200);
+const setBoardState = async (req, res, next) => {
+    try {
+        const {boardState: newBoardState, gameId} = req.body;
+        if (!isValidBoardState(newBoardState)) {
+            throw new TypeError(`New board state (${newBoardState}) entered is invalid !`);
+        }
+        const oldBoardState = await gameModel.findOneAndUpdate({gameId}, {boardState: newBoardState});
+        if (oldBoardState) {
+            console.log(oldBoardState);
+            res.sendStatus(200);
+        } else {
+            throw new TypeError(`Game ID (${gameId}) entered is invalid !`);
+        }
+    } catch (err) {
+        next(err); 
+    }
 };
 
 const getGameStatus = async (req, res, next) => {
     await getGameProp("gameStatus", req, res, next);
 };
 
-const setGameStatus = async (req, res) => {
+const joinGame = async (gameId) => {
+    const retrievedGameInfo = (await gameModel.find({gameId}))[0];
+    if (!retrievedGameInfo) {
+        throw new TypeError(`Game ID (${gameId}) entered is invalid !`);
+    }
+    const currentGameStatus = retrievedGameInfo["gameStatus"];
+    if (currentGameStatus === "playing") {
+        throw new Error("Two players have already joined this game!")
+    }
+    await gameModel.findOneAndUpdate({gameId: gameId}, {gameStatus: "playing"});
+};
+
+const quitGame = async (gameId) => {
+    const oldGameInfo = await gameModel.findOneAndUpdate({gameId: gameId}, {gameStatus: "waiting"});
+    if (!oldGameInfo) {
+        throw new TypeError(`Game ID (${gameId}) entered is invalid !`);
+    } else if (oldGameInfo["gameStatus"] === "waiting") { // last player has left 
+        await gameModel.deleteOne({gameId}); // delete game with no player
+    }
+};
+
+const updateGameStatus = async (req, res, next) => {
     try {
         const {"player_status": playerStatus} = req.query;
         const { gameId } = req.body;
+        // need to check if game id is valid
         if (playerStatus === "join") {
-            await gameModel.findOneAndUpdate({gameId: gameId}, {gameStatus: "playing"});
+            await joinGame(gameId);
         } else if (playerStatus === "quit") {
-            await gameModel.findOneAndUpdate({gameId: gameId}, {gameStatus: "waiting"});
+            await quitGame(gameId);
         } else {
             throw new TypeError(`The player status (${playerStatus}) entered is invalid !`);
         }
@@ -80,5 +115,5 @@ module.exports = {
     getBoardState,
     getGameStatus,
     setBoardState,
-    setGameStatus,
+    updateGameStatus,
 };

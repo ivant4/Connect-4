@@ -80,6 +80,6 @@ const Cell = ({cellState, cellIndex}) => {
             />
         </div>
     );
-}
+};
 
 export default Cell;

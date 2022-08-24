@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
+import CloseButton from '../Button/CloseButton';
 
-const RulesModal = ({ showRulesModal, setshowRulesModal}) => {
-    const closeRulesModal = () => {
-        setshowRulesModal(false);
-    }
+const RulesModal = ({ showRulesModal, setShowRulesModal}) => {
     return (
         <div className={`modal-container ${showRulesModal && "is-open"}`}>
             <div className='modal-content'>
@@ -11,12 +9,7 @@ const RulesModal = ({ showRulesModal, setshowRulesModal}) => {
                     <h2 className='modal-heading'>
                         Rules of the Game
                     </h2>
-                    <button 
-                    className='btn exit-btn' 
-                    onClick={closeRulesModal}
-                    >
-                        x
-                    </button>
+                    <CloseButton setShowFunc={setShowRulesModal}/>
                 </div>
                 <p>
                     The aim of the game is to be the first player to 

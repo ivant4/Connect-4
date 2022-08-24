@@ -58,7 +58,6 @@ const setBoardState = async (req, res, next) => {
         }
         const oldBoardState = await gameModel.findOneAndUpdate({gameId}, {boardState: newBoardState});
         if (oldBoardState) {
-            console.log(oldBoardState);
             res.sendStatus(200);
         } else {
             throw new TypeError(`Game ID (${gameId}) entered is invalid !`);
@@ -79,7 +78,7 @@ const joinGame = async (gameId) => {
     }
     const currentGameStatus = retrievedGameInfo["gameStatus"];
     if (currentGameStatus === "playing") {
-        throw new Error("Two players have already joined this game!")
+        throw new TypeError("You cannot join this game! Two players have joined already. ")
     }
     await gameModel.findOneAndUpdate({gameId: gameId}, {gameStatus: "playing"});
 };
@@ -106,7 +105,9 @@ const updateGameStatus = async (req, res, next) => {
             throw new TypeError(`The player status (${playerStatus}) entered is invalid !`);
         }
         res.sendStatus(200);
-    } catch (err) { next(err); }
+    } catch (err) { 
+        next(err); 
+    }
 };
 
 

@@ -1,16 +1,21 @@
 import React, {useState} from 'react'
 import RulesModal from './Modal/RulesModal';
 import DisplayModal from './Modal/DisplayModal';
+import OnlineGameModal from './Modal/OnlineGameModal';
 
 const Toolbar = () => {
-    const [showDisplayModal, setshowDisplayModal] = useState(false);
-    const [showRulesModal, setshowRulesModal] = useState(false);
+    const [showDisplayModal, setShowDisplayModal] = useState(false);
+    const [showRulesModal, setShowRulesModal] = useState(false);
+    const [showOnlineGameModal, setShowOnlineGameModal] = useState(false);
     
     const revealDisplayModal = () => {
-        setshowDisplayModal(true);
+        setShowDisplayModal(true);
     };
     const revealRulesModal = () => {
-        setshowRulesModal(true);
+        setShowRulesModal(true);
+    };
+    const revealOnlineGameModal = () => {
+        setShowOnlineGameModal(true);
     };
     return (
         <>
@@ -24,24 +29,34 @@ const Toolbar = () => {
                         className='toolbar-setting' 
                         onClick={revealRulesModal}
                         >
-                            <h2>Rules</h2> 
+                            <h3>Rules</h3> 
                         </div>
                         <div 
                         className='toolbar-setting'
                         onClick={revealDisplayModal}
                         >
-                            <h2>Display</h2> 
+                            <h3>Display</h3> 
+                        </div>
+                        <div 
+                        className='toolbar-setting'
+                        onClick={revealOnlineGameModal}
+                        >
+                            <h3>Host/Join game</h3> 
                         </div>
                     </div>
                 </div>
             </div>
             <DisplayModal 
-            setshowDisplayModal={setshowDisplayModal} 
+            setShowDisplayModal={setShowDisplayModal} 
             showDisplayModal={showDisplayModal}
             />
             <RulesModal 
-            setshowRulesModal={setshowRulesModal} 
+            setShowRulesModal={setShowRulesModal} 
             showRulesModal={showRulesModal}
+            />
+            <OnlineGameModal 
+            setShowOnlineGameModal={setShowOnlineGameModal} 
+            showOnlineGameModal={showOnlineGameModal}
             />
         </>
     );

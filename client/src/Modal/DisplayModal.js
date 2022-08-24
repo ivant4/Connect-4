@@ -1,12 +1,10 @@
 import React from 'react'
-import ToggleButton from '../ToggleButton';
 import { toggleDarkTheme } from '../DisplaySettingsController'
+import CloseButton from '../Button/CloseButton';
+import ToggleButton from '../Button/ToggleButton';
 
 
-const DisplayModal = ({ showDisplayModal, setshowDisplayModal }) => {
-    const closeDisplayModal = () => {
-        setshowDisplayModal(false);
-    }
+const DisplayModal = ({ showDisplayModal, setShowDisplayModal }) => {
     return (
         <div className={`modal-container ${showDisplayModal && "is-open"}`}>
             <div className='modal-content'>
@@ -14,12 +12,7 @@ const DisplayModal = ({ showDisplayModal, setshowDisplayModal }) => {
                     <h2 className='modal-heading'>
                         Display Settings
                     </h2>
-                    <button 
-                    className='btn exit-btn' 
-                    onClick={closeDisplayModal}
-                    >
-                        x
-                    </button>
+                    <CloseButton setShowFunc={setShowDisplayModal}/>
                 </div>
                 <div className="setting">
                     <h3>Dark Theme</h3>

@@ -60,7 +60,7 @@ code {
 .toolbar {
   display: flex;
   max-width: 1000px;
-  min-width: 600px;
+  min-width: 700px;
 }
 
 .toolbar-title {
@@ -68,22 +68,24 @@ code {
   align-items: center;
   justify-content: start;
   color: var(--secondaryColour);
-  width: 50vw;
+  width: 40vw;
   font-size: 18px;
 }
 
 .toolbar-settings {
   display: flex;
   justify-content: space-around;
-  align-items: center;
-  max-width: 500px;
+  max-width: 600px;
   min-width: 300px;
 }
+
 .toolbar-setting {
   height: 100%;
   width: 50%;
   display: flex;
   justify-content: center;
+  align-items: center;
+  text-align: center;
   border-radius: 3%;
   border-bottom: 3px solid transparent;
 }
@@ -99,7 +101,7 @@ code {
   width: 60%;
   height: 50px;
 }
-.exit-btn {
+.close-btn {
   border-radius: 40%;
   width: 22.5px;
   height: 20px;
@@ -128,6 +130,16 @@ code {
   width: 25px;
   height: 25px;
   border-radius: 50%;
+}
+
+.host-btn, .join-btn {
+  background-color: var(--primaryColour);
+  color: black;
+  border-radius: 7%;
+  width: 30%;
+  padding: 10px;
+  font-size: 22px;
+  margin: 0px 10px 0px 10px;
 }
 
 /* ==== GameSection ==== */
@@ -243,21 +255,24 @@ code {
 }
 
 /* Utility */
-.utility {
+.utility-container {
+  display: flex;
+  flex-direction: column;
   margin-left: 2.5vw;
+  justify-content: center;
 }
 
 .turn-indicator {
   background-color: var(--turnIndicatorColour);
   padding: 5px 30px 20px 30px;
   border-radius: 5%;
+  justify-content: center;
   text-align: center;
   margin-bottom: 20px;
 }
 
 .player-counter {
   position: relative;
-  margin: 0px;
   z-index: 1;
 }
 
@@ -266,8 +281,9 @@ code {
   color: black;
   border-radius: 7%;
   width: 100%;
-  padding: 5px;
+  padding: 10px;
   font-size: 22px;
+  margin: 5px 0px 5px 0px;
 }
 
 /* ==== Modal ==== */

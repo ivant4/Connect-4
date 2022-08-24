@@ -7,16 +7,11 @@ const Toolbar = () => {
     const [showDisplayModal, setShowDisplayModal] = useState(false);
     const [showRulesModal, setShowRulesModal] = useState(false);
     const [showOnlineGameModal, setShowOnlineGameModal] = useState(false);
+
+    const revealModal = (setShowFunc) => {
+        setShowFunc(true);
+    }
     
-    const revealDisplayModal = () => {
-        setShowDisplayModal(true);
-    };
-    const revealRulesModal = () => {
-        setShowRulesModal(true);
-    };
-    const revealOnlineGameModal = () => {
-        setShowOnlineGameModal(true);
-    };
     return (
         <>
             <div className='toolbar-container'>
@@ -27,19 +22,19 @@ const Toolbar = () => {
                     <div className='toolbar-settings'>
                         <div 
                         className='toolbar-setting' 
-                        onClick={revealRulesModal}
+                        onClick={() => revealModal(setShowRulesModal)}
                         >
                             <h3>Rules</h3> 
                         </div>
                         <div 
                         className='toolbar-setting'
-                        onClick={revealDisplayModal}
+                        onClick={() => revealModal(setShowDisplayModal)}
                         >
                             <h3>Display</h3> 
                         </div>
                         <div 
                         className='toolbar-setting'
-                        onClick={revealOnlineGameModal}
+                        onClick={() => revealModal(setShowOnlineGameModal)}
                         >
                             <h3>Host/Join game</h3> 
                         </div>

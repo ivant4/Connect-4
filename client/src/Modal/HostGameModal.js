@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import CloseButton from '../Button/CloseButton';s
+import CloseButton from '../Button/CloseButton';
 
 const HostGameModal = ({showHostGameModal, setShowHostGameModal}) => {
-    //const [isGettingGameId, setIsGettingGameId] = useState(true);
-    //const [isWaitingForPlayerToJoin, setIisWaitingForPlayerToJoin] = useState(true);
+    const [isGettingGameId, setIsGettingGameId] = useState(true);
+    const [isWaitingForPlayerToJoin, setIisWaitingForPlayerToJoin] = useState(true);
 
     return (
-        <></>
-        /*
         <div className={`modal-container ${showHostGameModal && "is-open"}`}>
             <div className='modal-content'>
                 <div className='modal-header'>
@@ -18,7 +16,7 @@ const HostGameModal = ({showHostGameModal, setShowHostGameModal}) => {
                 </div>
             </div>
         </div>
-        */
+
     );
 }
 

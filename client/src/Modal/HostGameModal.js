@@ -1,35 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import CloseButton from '../Button/CloseButton';
 import axios from 'axios';
 
 
 const HostGameModal = ({showHostGameModal, setShowHostGameModal}) => {
-    const [isGettingGameId, setIsGettingGameId] = useState(true);
-    const [isWaitingForPlayerToJoin, setIisWaitingForPlayerToJoin] = useState(true);
-    const API_URL = process.env.REACT_APP_API_URL;
+    const [isWaitingForPlayerToJoin, setIisWaitingForPlayerToJoin] = useState(false);
+    const [showNewGameId, setShowNewGameId] = useState(false);
+
+    const API_URL_REF = useRef(process.env.REACT_APP_API_URL);
 
     const closeHostGameModal = () => setShowHostGameModal(false);
     const getGameStatus = async(gameId) => {
         try {
-            console.log(await axios.get(`${API_URL}/game-status`, {
+            const gameStatus = await axios.get(`${API_URL_REF.current}/game-status`, {
                 params: {
-                    "game_id": 7717
+                    "game_id": gameId
                 }
-            }));
+            });
+            console.log(gameStatus);
         } catch (err) {
             console.log(err);
         }
     };
 
     const hostNewGame = async() => {
+        const newGameId = await axios.post(`${API_URL_REF}/game-status`);
         /*
-        const newGameId = await axios.post(API_URL);
-        let currentGameStatus = await getGameStatus();
+        let currentGameStatus = await getGameStatus(newGameId);
         while (currentGameStatus === "waiting") {
-            currentGameStatus = setTimeout(getGameStatus, 500);
+            currentGameStatus = setTimeout(() => getGameStatus(newGameId), 500);
         }
-        */
+        setIsActivePlayer(true);
+        setIsOnline(true);
         closeHostGameModal();
+        */
     };
 
     return (
@@ -43,7 +47,7 @@ const HostGameModal = ({showHostGameModal, setShowHostGameModal}) => {
                 </div>
                 <button 
                     className='btn host-btn'
-                    onClick={() => getGameStatus(7717)}
+                    onClick={() => getGameStatus(7972)}
                 >
                         Host
                 </button>

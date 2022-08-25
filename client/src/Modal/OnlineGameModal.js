@@ -12,7 +12,7 @@ const OnlineGameModal = ({showOnlineGameModal, setShowOnlineGameModal}) => {
         setShowOnlineGameModal(false);
         setShowNextModal(true);
     };
-    
+
     if (showHostGameModal) {
         return (
             <HostGameModal 
@@ -33,7 +33,7 @@ const OnlineGameModal = ({showOnlineGameModal, setShowOnlineGameModal}) => {
                 <div className='modal-content'>
                     <div className='modal-header'>
                         <h2 className='modal-heading'>
-                            Host/Join a Game
+                            Online game
                         </h2>
                         <CloseButton setShowFunc={setShowOnlineGameModal}/>
                     </div>

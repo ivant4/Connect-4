@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
 import CloseButton from '../Button/CloseButton';
+import axios from 'axios';
 
 const HostGameModal = ({showHostGameModal, setShowHostGameModal}) => {
     const [isGettingGameId, setIsGettingGameId] = useState(true);
     const [isWaitingForPlayerToJoin, setIisWaitingForPlayerToJoin] = useState(true);
+
+    const hostNewGame = async() => {
+
+    };
 
     return (
         <div className={`modal-container ${showHostGameModal && "is-open"}`}>
@@ -16,7 +21,6 @@ const HostGameModal = ({showHostGameModal, setShowHostGameModal}) => {
                 </div>
             </div>
         </div>
-
     );
 }
 

@@ -8,6 +8,14 @@ for (let i = 0; i < 6; i++) {
     }
 }
 
+
+const throwRequestError = (message, next) => {
+    // there is an error in the request
+    const requestError = new TypeError(message);
+    next(requestError);
+    throw requestError;
+};
+
 const createGameId = async () => {
     const MAX_NUM_OF_GAME_ID = 10000;
     while (true) {
@@ -39,10 +47,10 @@ const getGameProp = async (gameProp, req, res, next) => {
             const gamePropFound = retrievedGameInfo[gameProp];
             res.status(200).json({gameProp, value: gamePropFound});
         } else {
-            throw new TypeError(`Game ID (${gameId}) entered is invalid !`);
+            throwRequestError(`Game ID (${gameId}) entered is invalid !`, next)
         }
     } catch (err) { 
-        next(err); 
+        console.log(err); 
     }
 };
 
@@ -54,16 +62,16 @@ const setBoardState = async (req, res, next) => {
     try {
         const {boardState: newBoardState, gameId} = req.body;
         if (!isValidBoardState(newBoardState)) {
-            throw new TypeError(`New board state (${newBoardState}) entered is invalid !`);
+            throwRequestError(`New board state (${newBoardState}) entered is invalid !`, next);
         }
         const oldBoardState = await gameModel.findOneAndUpdate({gameId}, {boardState: newBoardState});
         if (oldBoardState) {
             res.sendStatus(200);
         } else {
-            throw new TypeError(`Game ID (${gameId}) entered is invalid !`);
+            throwRequestError(`Game ID (${gameId}) entered is invalid !`, next);
         }
     } catch (err) {
-        next(err); 
+        console.log(err); 
     }
 };
 
@@ -71,10 +79,10 @@ const getGameStatus = async (req, res, next) => {
     await getGameProp("gameStatus", req, res, next);
 };
 
-const joinGame = async (gameId) => {
+const joinGame = async (gameId, next) => {
     const retrievedGameInfo = (await gameModel.find({gameId}))[0];
     if (!retrievedGameInfo) {
-        throw new TypeError(`Game ID (${gameId}) entered is invalid !`);
+        throwRequestError(`Game ID (${gameId}) entered is invalid !`, next);
     }
     const currentGameStatus = retrievedGameInfo["gameStatus"];
     if (currentGameStatus === "playing") {
@@ -83,10 +91,10 @@ const joinGame = async (gameId) => {
     await gameModel.findOneAndUpdate({gameId: gameId}, {gameStatus: "playing"});
 };
 
-const quitGame = async (gameId) => {
+const quitGame = async (gameId, next) => {
     const oldGameInfo = await gameModel.findOneAndUpdate({gameId: gameId}, {gameStatus: "waiting"});
     if (!oldGameInfo) {
-        throw new TypeError(`Game ID (${gameId}) entered is invalid !`);
+        throwRequestError(`Game ID (${gameId}) entered is invalid !`, next);
     } else if (oldGameInfo["gameStatus"] === "waiting") { // last player has left 
         await gameModel.deleteOne({gameId}); // delete game with no player
     }
@@ -98,15 +106,15 @@ const updateGameStatus = async (req, res, next) => {
         const { gameId } = req.body;
         // need to check if game id is valid
         if (playerStatus === "join") {
-            await joinGame(gameId);
+            await joinGame(gameId, next);
         } else if (playerStatus === "quit") {
-            await quitGame(gameId);
+            await quitGame(gameId, next);
         } else {
-            throw new TypeError(`The player status (${playerStatus}) entered is invalid !`);
+            throwRequestError(`The player status (${playerStatus}) entered is invalid !`, next)
         }
         res.sendStatus(200);
     } catch (err) { 
-        next(err); 
+        console.log(err); 
     }
 };
 

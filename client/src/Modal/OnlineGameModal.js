@@ -10,7 +10,6 @@ const OnlineGameModal = ({showOnlineGameModal, setShowOnlineGameModal}) => {
 
     const openNextModal = (setShowNextModal) => {
         setShowOnlineGameModal(false);
-        console.log("This is working");
         setShowNextModal(true);
     };
     if (showHostGameModal) {

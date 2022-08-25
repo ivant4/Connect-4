@@ -9,13 +9,6 @@ for (let i = 0; i < 6; i++) {
 }
 
 
-const throwRequestError = (message, next) => {
-    // there is an error in the request
-    const requestError = new TypeError(message);
-    next(requestError);
-    throw requestError;
-};
-
 const createGameId = async () => {
     const MAX_NUM_OF_GAME_ID = 10000;
     while (true) {
@@ -39,9 +32,16 @@ const createNewGame = async (req, res) => {
     res.status(200).json({gameId: newGameId});
 };
 
+const throwRequestError = (message, next) => {
+    // there is an error in the request
+    const requestError = new TypeError(message);
+    next(requestError);
+    throw requestError;
+};
+
 const getGameProp = async (gameProp, req, res, next) => {
     try {
-        const { gameId } = req.body;
+        const {"game_id": gameId} = req.query;
         const retrievedGameInfo = (await gameModel.find({gameId}))[0];
         if (retrievedGameInfo) {
             const gamePropFound = retrievedGameInfo[gameProp];
@@ -60,7 +60,8 @@ const getBoardState = async (req, res, next) => {
 
 const setBoardState = async (req, res, next) => {
     try {
-        const {boardState: newBoardState, gameId} = req.body;
+        const {"game_id": gameId} = req.query;
+        const {boardState: newBoardState} = req.body;
         if (!isValidBoardState(newBoardState)) {
             throwRequestError(`New board state (${newBoardState}) entered is invalid !`, next);
         }
@@ -86,7 +87,7 @@ const joinGame = async (gameId, next) => {
     }
     const currentGameStatus = retrievedGameInfo["gameStatus"];
     if (currentGameStatus === "playing") {
-        throw new TypeError("You cannot join this game! Two players have joined already. ")
+        throwRequestError(`You cannot join this game! Two players have joined already.`, next);
     }
     await gameModel.findOneAndUpdate({gameId: gameId}, {gameStatus: "playing"});
 };
@@ -102,8 +103,7 @@ const quitGame = async (gameId, next) => {
 
 const updateGameStatus = async (req, res, next) => {
     try {
-        const {"player_status": playerStatus} = req.query;
-        const { gameId } = req.body;
+        const {"player_status": playerStatus, "game_id": gameId} = req.query;
         // need to check if game id is valid
         if (playerStatus === "join") {
             await joinGame(gameId, next);

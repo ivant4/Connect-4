@@ -12,6 +12,7 @@ const OnlineGameModal = ({showOnlineGameModal, setShowOnlineGameModal}) => {
         setShowOnlineGameModal(false);
         setShowNextModal(true);
     };
+    
     if (showHostGameModal) {
         return (
             <HostGameModal 

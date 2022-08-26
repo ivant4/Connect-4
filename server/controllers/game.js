@@ -48,7 +48,9 @@ const getGameProp = async (gameProp, req, res, next) => {
         const retrievedGameInfo = (await gameModel.find({gameId}))[0];
         if (retrievedGameInfo) {
             const gamePropFound = retrievedGameInfo[gameProp];
-            res.status(200).json({gameProp, value: gamePropFound});
+            const resBody = {};
+            resBody[`${gameProp}`] = gamePropFound;
+            res.status(200).json(resBody);
         } else {
             throwRequestError(`Game ID (${gameId}) entered is invalid !`)
         }

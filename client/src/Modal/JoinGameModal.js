@@ -8,6 +8,7 @@ const JoinGameModal = ({showJoinGameModal, setShowJoinGameModal}) => {
 
     const API_URL_REF = useRef(process.env.REACT_APP_API_URL);
     const gameIdRef = useRef();
+    const errorMsgRef = useRef();
 
     const closeJoinGameModal = () => setShowJoinGameModal(false);
 
@@ -15,29 +16,40 @@ const JoinGameModal = ({showJoinGameModal, setShowJoinGameModal}) => {
         const gameId = parseInt(gameIdInput);
         if (gameId >= 0 && gameId < 9999) return true;
         return false;
-    }
+    };
+
+    const resetGameIdForm = (errorMsg) => {
+        errorMsgRef.current = errorMsg;
+        gameIdRef.current.value = "";
+        setIsGameIdFormDisabled(false);
+        setShowInputErrMsg(true);
+    };
 
     const joinGame = async (e) => {
         e.preventDefault();
         await setIsGameIdFormDisabled(true);
         const gameIdInput = gameIdRef.current.value;
-        console.log(gameIdInput, typeof gameIdInput);
-        console.log(isGameIdInputValid(gameIdInput));
         if (isGameIdInputValid(gameIdInput)) {
             try {
                 const response = await axios.post(
                     `${API_URL_REF.current}/game-status`, 
                     {params: { "game_id": parseInt(gameIdInput) }
                 });
-                closeJoinGameModal();
+                if (response.status === 200) {
+                    closeJoinGameModal();
+                    // setIsOnline(true);
+                    // setIsActivePlayer(false);
+                } else if (response.status === 400) {
+                    resetGameIdForm(
+                        "Error message - game id is incorrect or two players has joined this game"
+                    );
+                }
             } catch (err) {
                 console.log(err);
+                resetGameIdForm("An internal error have occured !");
             }
-        } else {
-            setIsGameIdFormDisabled(false);
-            setShowInputErrMsg(true);
-            gameIdRef.current.value = "";
         }
+        resetGameIdForm("The input entered was invalid. Please enter a 4-digit number");
     };
 
     return (
@@ -68,6 +80,7 @@ const JoinGameModal = ({showJoinGameModal, setShowJoinGameModal}) => {
                     Join
                 </button>
             </form>
+            {showInputErrMsg && <p>{errorMsgRef.current}</p>}
         </div>
     </div>
     );

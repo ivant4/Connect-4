@@ -41,12 +41,9 @@ const HostGameModal = ({showHostGameModal, setShowHostGameModal}) => {
         if (currentGameStatus === "playing") {
             //setIsActivePlayer(true);
             //setIsOnline(true);
-            console.log("it is working now !!!");
             closeHostGameModal();
         } else {
             // handle invalid game status
-            console.log(currentGameStatus)
-            console.log("not working!!!")
         }
     };
 

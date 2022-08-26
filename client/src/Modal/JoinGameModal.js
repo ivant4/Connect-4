@@ -25,7 +25,7 @@ const JoinGameModal = ({showJoinGameModal, setShowJoinGameModal}) => {
         setShowInputErrMsg(true);
     };
 
-    const joinGame = async (e) => {
+    const joinGame = async(e) => {
         e.preventDefault();
         await setIsGameIdFormDisabled(true);
         const gameIdInput = gameIdRef.current.value;
@@ -40,7 +40,7 @@ const JoinGameModal = ({showJoinGameModal, setShowJoinGameModal}) => {
                     // setIsActivePlayer(false);
                 } else if (response.status === 400) {
                     resetGameIdForm(
-                        "Error message - game id is incorrect or two players has joined this game"
+                        "Game id entered was incorrect or two players has already joined this game"
                     );
                 }
             } catch (err) {
@@ -48,7 +48,7 @@ const JoinGameModal = ({showJoinGameModal, setShowJoinGameModal}) => {
                 resetGameIdForm("An internal error have occured !");
             }
         }
-        resetGameIdForm("The input entered was invalid. Please enter a 4-digit number");
+        resetGameIdForm("The input entered was invalid. Please enter a 4-digit number.");
     };
 
     return (
@@ -80,8 +80,8 @@ const JoinGameModal = ({showJoinGameModal, setShowJoinGameModal}) => {
                 </button>
             </form>
             {showInputErrMsg && <p>{errorMsgRef.current}</p>}
+            </div>
         </div>
-    </div>
     );
 }
 

@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useRef, useState} from 'react';
 
 const OnlineGameContext = React.createContext();
 
-const GameContextProvider = ({children}) => {
+const OnlineGameContextProvider = ({children}) => {
     const [isOnline, setIsOnline] = useState(false);
     const [isActivePlayer, setIsActivePlayer] = useState(false);
     const [hasBoardStateChanged, setHasBoardStateChanged] = useState(false);
@@ -16,3 +16,9 @@ const GameContextProvider = ({children}) => {
         {children}
     </OnlineGameContext.Provider>
 };
+
+const useOnlineGameContext = () => {
+    return useContext(OnlineGameContext);
+}
+
+export {useOnlineGameContext, OnlineGameContextProvider};

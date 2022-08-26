@@ -24,17 +24,29 @@ const HostGameModal = ({showHostGameModal, setShowHostGameModal}) => {
         }
     };
 
-    const waitForPlayerToJoin = async (newGameId) => {
+    const waitAndGetGameStatus = () => {
+        return new Promise(resolve => {
+            setTimeout(async() => {
+                const currentGameStatus = await getGameStatus(newGameIdRef.current);
+                resolve(currentGameStatus);
+            }, 500);
+        });
+    };
+
+    const waitForPlayerToJoin = async(newGameId) => {
         let currentGameStatus = await getGameStatus(newGameId);
         while (currentGameStatus === "waiting") {
-            currentGameStatus = await setTimeout(() => getGameStatus(newGameId), 500);
+            currentGameStatus = await waitAndGetGameStatus();
         }
         if (currentGameStatus === "playing") {
             //setIsActivePlayer(true);
             //setIsOnline(true);
+            console.log("it is working now !!!");
             closeHostGameModal();
         } else {
-            // handle invalid game status 
+            // handle invalid game status
+            console.log(currentGameStatus)
+            console.log("not working!!!")
         }
     };
 
@@ -42,7 +54,7 @@ const HostGameModal = ({showHostGameModal, setShowHostGameModal}) => {
         const response = await axios.post(`${API_URL_REF.current}/game-status`);
         const newGameId = response.data.gameId;
         newGameIdRef.current = newGameId;
-        await setShowNewGameId(newGameId);
+        setShowNewGameId(true);
         waitForPlayerToJoin(newGameId);
     };
 

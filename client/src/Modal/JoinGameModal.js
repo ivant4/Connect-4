@@ -31,10 +31,9 @@ const JoinGameModal = ({showJoinGameModal, setShowJoinGameModal}) => {
         const gameIdInput = gameIdRef.current.value;
         if (isGameIdInputValid(gameIdInput)) {
             try {
-                const response = await axios.post(
-                    `${API_URL_REF.current}/game-status`, 
-                    {params: { "game_id": parseInt(gameIdInput) }
-                });
+                const response = await axios.patch(
+                    `${API_URL_REF.current}/game-status/?player_status=join&game_id=${parseInt(gameIdInput)}`, 
+                );
                 if (response.status === 200) {
                     closeJoinGameModal();
                     // setIsOnline(true);

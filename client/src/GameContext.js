@@ -16,8 +16,8 @@ for (let i = 0; i < 6; i++) {
 const GameContextProvider = ({children}) => {
     // the children being passed in is the app component!!!
     const [boardState, setBoardState] = useState(initialBoardState.map(elem => [...elem]));
-    const [activePlayerNum, setActivePlayerNum] = useState(1);
-    const [colOfNewDisk, setColOfNewDisk] = useState(0);
+    const [activePlayerNum, setActivePlayerNum] = useState(1); // can this be useRef ? - turn indicator rerender
+    const [colOfNewDisk, setColOfNewDisk] = useState(0); // can this be useRef ? setMoveCounter triggers rerender anyways
     const [isGameOver, setIsGameOver] = useState(false);
     const [moveCounter, setMoveCounter] = useState(0);
     const [currentCol, setCurrentCol] = useState(0);
@@ -27,9 +27,10 @@ const GameContextProvider = ({children}) => {
     useEffect(() => {
         if (moveCounter === 0) return; // during inital render and game resets
         const rowOfNewDisk = findRowOfNewDisk(boardState, colOfNewDisk);
-        boardState[rowOfNewDisk][colOfNewDisk] = activePlayerNum;
         cellIndexOfNewDisk.current = (rowOfNewDisk * 7) + colOfNewDisk;
-        setBoardState(boardState);
+        const newBoardState = boardState.map(elem => [...elem]);
+        newBoardState[rowOfNewDisk][colOfNewDisk] = activePlayerNum;
+        setBoardState(newBoardState);
         if (hasActivePlayerWon(
             boardState, 
             activePlayerNum, 
@@ -46,6 +47,7 @@ const GameContextProvider = ({children}) => {
         }
     }, [moveCounter]);
 
+    // TODO can the parameter new active player number for the online mode !!!!
     const resetGame = async () => {
         await setIsGameOver(false); 
         // to prevent the gameover Modal from updating to an incorrect message
@@ -78,4 +80,4 @@ const useGameContext = () => {
     return useContext(GameContext);
 }
 
-export {useGameContext, GameContextProvider};
+export {useGameContext, GameContextProvider, initialBoardState};

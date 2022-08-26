@@ -1,13 +1,23 @@
 import React, { useState, useRef, useEffect } from 'react';
 import CloseButton from '../Button/CloseButton';
 import axios from 'axios';
+import { useOnlineGameContext } from '../OnlineGameContext';
+import { useGameContext } from '../GameContext';
 
 // close the game while waiting the game does not delete the game in the database
 const HostGameModal = ({showHostGameModal, setShowHostGameModal}) => {
+    const {
+        setIsActivePlayer,
+        setIsOnline,
+        onlineGameIdRef,
+        API_URL_REF
+    } = useOnlineGameContext();
+
+    const {resetGame, boardState} = useGameContext();
+
+
     const [showNewGameId, setShowNewGameId] = useState(false);
     const newGameIdRef = useRef(0);
-
-    const API_URL_REF = useRef(process.env.REACT_APP_API_URL);
 
     const closeHostGameModal = () => setShowHostGameModal(false);
 
@@ -27,7 +37,7 @@ const HostGameModal = ({showHostGameModal, setShowHostGameModal}) => {
     const waitAndGetGameStatus = () => {
         return new Promise(resolve => {
             setTimeout(async() => {
-                const currentGameStatus = await getGameStatus(newGameIdRef.current);
+                const currentGameStatus = await getGameStatus(onlineGameIdRef.current);
                 resolve(currentGameStatus);
             }, 500);
         });
@@ -39,8 +49,10 @@ const HostGameModal = ({showHostGameModal, setShowHostGameModal}) => {
             currentGameStatus = await waitAndGetGameStatus();
         }
         if (currentGameStatus === "playing") {
-            //setIsActivePlayer(true);
-            //setIsOnline(true);
+            // the other player has joined
+            await resetGame();
+            setIsActivePlayer(true);
+            setIsOnline(true);
             closeHostGameModal();
         } else {
             // handle invalid game status
@@ -50,7 +62,7 @@ const HostGameModal = ({showHostGameModal, setShowHostGameModal}) => {
     const hostNewGame = async() => {
         const response = await axios.post(`${API_URL_REF.current}/game-status`);
         const newGameId = response.data.gameId;
-        newGameIdRef.current = newGameId;
+        onlineGameIdRef.current = newGameId;
         setShowNewGameId(true);
         waitForPlayerToJoin(newGameId);
     };
@@ -72,7 +84,7 @@ const HostGameModal = ({showHostGameModal, setShowHostGameModal}) => {
                 </div>
                 {showNewGameId === true? 
                     <p>
-                        Your game Id is {newGameIdRef.current} <br/>
+                        Your game Id is {onlineGameIdRef.current} <br/>
                         Waiting for the other player to join...
                     </p>
                 :

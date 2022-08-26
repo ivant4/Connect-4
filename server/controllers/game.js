@@ -65,8 +65,8 @@ const getBoardState = async (req, res, next) => {
 
 const setBoardState = async (req, res, next) => {
     try {
-        const {"game_id": gameId} = req.query;
-        const {boardState: newBoardState} = req.body;
+        const gameId = req.body.params.game_id;
+        const newBoardState = req.body.data.boardState;
         if (!isValidBoardState(newBoardState)) {
             throwRequestError(`New board state (${newBoardState}) entered is invalid !`);
         }

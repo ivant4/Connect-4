@@ -1,14 +1,21 @@
 import React, { useState, useRef } from 'react';
 import CloseButton from '../Button/CloseButton';
+import { useOnlineGameContext } from '../OnlineGameContext';
 import axios from 'axios';
 
 const JoinGameModal = ({showJoinGameModal, setShowJoinGameModal}) => {
+    const {
+        setIsActivePlayer,
+        setIsOnline,
+        API_URL_REF,
+        onlineGameIdRef
+    } = useOnlineGameContext();
+
     const [isGameIdFormDisabled, setIsGameIdFormDisabled] = useState(false);
     const [showInputErrMsg, setShowInputErrMsg] = useState(false);
 
-    const API_URL_REF = useRef(process.env.REACT_APP_API_URL);
-    const gameIdRef = useRef();
-    const errorMsgRef = useRef();
+    const gameIdRef = useRef("");
+    const errorMsgRef = useRef("");
 
     const closeJoinGameModal = () => setShowJoinGameModal(false);
 
@@ -20,9 +27,9 @@ const JoinGameModal = ({showJoinGameModal, setShowJoinGameModal}) => {
 
     const resetGameIdForm = (errorMsg) => {
         errorMsgRef.current = errorMsg;
-        gameIdRef.current.value = "";
-        setIsGameIdFormDisabled(false);
+        gameIdRef.current = "";
         setShowInputErrMsg(true);
+        setIsGameIdFormDisabled(false);
     };
 
     const joinGame = async(e) => {
@@ -35,9 +42,9 @@ const JoinGameModal = ({showJoinGameModal, setShowJoinGameModal}) => {
                     `${API_URL_REF.current}/game-status/?player_status=join&game_id=${parseInt(gameIdInput)}`, 
                 );
                 if (response.status === 200) {
+                    onlineGameIdRef.current = parseInt(gameIdInput);
+                    setIsOnline(true);
                     closeJoinGameModal();
-                    // setIsOnline(true);
-                    // setIsActivePlayer(false);
                 } else if (response.status === 400) {
                     resetGameIdForm(
                         "Game id entered was incorrect or two players has already joined this game"
@@ -79,7 +86,7 @@ const JoinGameModal = ({showJoinGameModal, setShowJoinGameModal}) => {
                     Join
                 </button>
             </form>
-            {showInputErrMsg && <p>{errorMsgRef.current}</p>}
+            {showInputErrMsg && <p>{showInputErrMsg && errorMsgRef.current}</p>}
             </div>
         </div>
     );

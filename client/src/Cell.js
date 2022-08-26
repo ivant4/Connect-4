@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { useGameContext } from './GameContext';
 import { isLegalMove } from './GameLogic';
+import { useOnlineGameContext } from './OnlineGameContext';
 
 
 const diskColour = {
@@ -20,6 +21,13 @@ const Cell = ({cellState, cellIndex}) => {
         setCurrentCol,
         cellIndexOfNewDisk,
     } = useGameContext();
+
+    const {
+        isOnline,
+        isActivePlayer,
+        thisPlayerMoveCounter,
+        setThisPlayerMoveCounter
+    } = useOnlineGameContext();
 
     const cellRef = useRef();
     const isAnimating = cellIndexOfNewDisk === cellIndex;
@@ -43,12 +51,14 @@ const Cell = ({cellState, cellIndex}) => {
     };
 
     const selectNewDiskCol = async() => {
+        if (isOnline && !isActivePlayer) return; // do nothing if you are not the active player
         const colOfNewDisk = cellIndex % 7;
         if (isLegalMove(boardState, colOfNewDisk) && (!isGameOver)) {
-            setColOfNewDisk(colOfNewDisk);
-            await setMoveCounter(moveCounter + 1);
-            // wait for setMoveCounter to finish before useEffect in GameContext 
-            // is executed with the updated value of moveCounter.
+            await setColOfNewDisk(colOfNewDisk);
+            setMoveCounter(moveCounter + 1);
+            if (isOnline && isActivePlayer) {
+                setThisPlayerMoveCounter(thisPlayerMoveCounter + 1);
+            } 
         }
     };
 

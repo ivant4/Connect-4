@@ -4,20 +4,15 @@ import axios from 'axios';
 import { useOnlineGameContext } from '../OnlineGameContext';
 import { useGameContext } from '../GameContext';
 
-// close the game while waiting the game does not delete the game in the database
 const HostGameModal = ({showHostGameModal, setShowHostGameModal}) => {
     const {
         isActivePlayerRef,
         setIsOnline,
         onlineGameIdRef,
-        API_URL_REF
+        API_URL_REF,
     } = useOnlineGameContext();
-
-    const {resetGame, boardState} = useGameContext();
-
-
+    const {resetGame} = useGameContext();
     const [showNewGameId, setShowNewGameId] = useState(false);
-    const newGameIdRef = useRef(0);
 
     const closeHostGameModal = () => setShowHostGameModal(false);
 
@@ -48,17 +43,13 @@ const HostGameModal = ({showHostGameModal, setShowHostGameModal}) => {
         while (currentGameStatus === "waiting") {
             currentGameStatus = await waitAndGetGameStatus();
         }
-        if (currentGameStatus === "playing") {
-            // the other player has joined
-            isActivePlayerRef.current = true;
-            Promise.all([
-                resetGame(),
-                setIsOnline(true)
-            ]);
-            closeHostGameModal();
-        } else {
-            // handle invalid game status
-        }
+        // the other player has joined
+        isActivePlayerRef.current = true;
+        Promise.all([
+            resetGame(),
+            setIsOnline(true)
+        ]);
+        closeHostGameModal();
     };
 
     const hostNewGame = async() => {

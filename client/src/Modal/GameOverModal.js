@@ -1,5 +1,6 @@
 import React from 'react'
 import { useGameContext } from '../GameContext';
+import { useOnlineGameContext } from '../OnlineGameContext';
 
 const GameOverModal = () => {
     const {
@@ -8,12 +9,17 @@ const GameOverModal = () => {
         resetGame,
     } = useGameContext();
 
+    const {
+        isOnline,
+    } = useOnlineGameContext();
+
     return (
-        <div className={`modal-container ${isGameOver && "is-open game-over-modal"}`}>
+        <div className={`modal-container ${isGameOver && !isOnline && "is-open game-over-modal"}`}>
             <div className='modal-content'>
                 <h2>
                     Well played ! 
                     {
+
                         winningPlayerNum === 0 ? " It's a draw!":
                         ` Player ${winningPlayerNum} has won the game!`
                     }

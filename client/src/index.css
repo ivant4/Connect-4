@@ -276,14 +276,21 @@ code {
   z-index: 1;
 }
 
-.reset-btn {
-  background-color: var(--secondaryColour);
+.reset-btn, .quit-btn {
   color: black;
   border-radius: 7%;
   width: 100%;
   padding: 10px;
   font-size: 22px;
   margin: 5px 0px 5px 0px;
+}
+
+.reset-btn {
+  background-color: var(--secondaryColour);
+}
+
+.quit-btn {
+  background-color: #e00;
 }
 
 /* ==== Modal ==== */

@@ -24,8 +24,6 @@ const Cell = ({cellState, cellIndex}) => {
     const {
         isOnline,
         isActivePlayerRef,
-        thisPlayerMoveCounter,
-        setThisPlayerMoveCounter
     } = useOnlineGameContext();
 
     const cellRef = useRef();
@@ -50,16 +48,13 @@ const Cell = ({cellState, cellIndex}) => {
     };
 
     const selectNewDiskCol = async() => {
+        // need to disable the cells for active player after they have clicked once !!!
         if (isOnline && !isActivePlayerRef.current) return; // do nothing if you are not the active player
+        if (isActivePlayerRef.current) isActivePlayerRef.current = false;
         const colOfNewDisk = cellIndex % 7;
         if (isLegalMove(boardState, colOfNewDisk) && (!isGameOver)) {
             await setColOfNewDisk(colOfNewDisk);
-            await setMoveCounter(moveCounter + 1);
-            // need to make sure board state is updated before the next line executed !
-            if (isOnline && isActivePlayerRef.current) {
-                isActivePlayerRef.current = false;
-                setThisPlayerMoveCounter(thisPlayerMoveCounter + 1);
-            }
+            setMoveCounter(moveCounter + 1);
         }
     };
 

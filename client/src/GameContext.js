@@ -47,7 +47,6 @@ const GameContextProvider = ({children}) => {
         }
     }, [moveCounter]);
 
-    // TODO can the parameter new active player number for the online mode !!!!
     const resetGame = async () => {
         await setIsGameOver(false); 
         // to prevent the gameover Modal from updating to an incorrect message

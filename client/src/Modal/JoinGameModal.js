@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import CloseButton from '../Button/CloseButton';
 import { useOnlineGameContext } from '../OnlineGameContext';
 import axios from 'axios';
+import { useGameContext } from '../GameContext';
 
 const JoinGameModal = ({showJoinGameModal, setShowJoinGameModal}) => {
     const {
@@ -10,6 +11,7 @@ const JoinGameModal = ({showJoinGameModal, setShowJoinGameModal}) => {
         isActivePlayerRef,
         onlineGameIdRef,
     } = useOnlineGameContext();
+    const {resetGame} = useGameContext();
 
     const [isGameIdFormDisabled, setIsGameIdFormDisabled] = useState(false);
     const [showInputErrMsg, setShowInputErrMsg] = useState(false);
@@ -44,7 +46,10 @@ const JoinGameModal = ({showJoinGameModal, setShowJoinGameModal}) => {
                 if (response.status === 200) {
                     onlineGameIdRef.current = parseInt(gameIdInput);
                     isActivePlayerRef.current = false;
-                    setIsOnline(true);
+                    Promise.all([
+                        resetGame(),
+                        setIsOnline(true)
+                    ]);
                     closeJoinGameModal();
                 } else if (response.status === 400) {
                     resetGameIdForm(

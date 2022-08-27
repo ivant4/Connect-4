@@ -8,9 +8,8 @@ const OnlineGameContextProvider = ({children}) => {
     const [isOnline, setIsOnline] = useState(false);
     const [isActivePlayer, setIsActivePlayer] = useState(false);
     const [thisPlayerMoveCounter, setThisPlayerMoveCounter] = useState(0);
-    const [otherPlayerMoveCounter, setOtherPlayerMoveCounter] = useState(0);
 
-
+    const isActivePlayerRef = useRef(); 
     const onlineGameIdRef = useRef();
     // ensures useEffect doesn't run during initial render and only when
     // you update the board
@@ -26,7 +25,6 @@ const OnlineGameContextProvider = ({children}) => {
 
     const getBoardState = async() => {
         try {
-            console.log(`${API_URL_REF.current}/board-state`);
             const response = await axios.get(`${API_URL_REF.current}/board-state`, {
                 params: {
                     "game_id": onlineGameIdRef.current
@@ -95,34 +93,28 @@ const OnlineGameContextProvider = ({children}) => {
         }
         const colOfNewDisk = findColOfNewDisk(boardState, newBoardState);
         await setColOfNewDisk(colOfNewDisk);
-        setMoveCounter(2);
-        setOtherPlayerMoveCounter(otherPlayerMoveCounter + 1);
+        await setMoveCounter(2);
+        isActivePlayerRef.current = true;
     }, [isOnline]);
 
     useEffect(async() => {
         if (!isOnline) return;
-        await setIsActivePlayer(false);
         const response = setBoardState();
         let newBoardState = await getBoardState();
         while (!hasBoardStateChanged(boardState, newBoardState)) {
             newBoardState = await waitAndGetBoardState();
         }
+        console.log(boardState, newBoardState);
         const colOfNewDisk = findColOfNewDisk(boardState, newBoardState);
         await setColOfNewDisk(colOfNewDisk);
-        setMoveCounter(moveCounter + 1);
-        setOtherPlayerMoveCounter(otherPlayerMoveCounter + 1);
+        await setMoveCounter(moveCounter + 1);
+        isActivePlayerRef.current = true;
     }, [thisPlayerMoveCounter]);
-
-    useEffect(async() => {
-        if (!isOnline) return;
-        setIsActivePlayer(true);
-    }, [otherPlayerMoveCounter]);
 
     return <OnlineGameContext.Provider value={{
         isOnline,
         setIsOnline,
-        isActivePlayer,
-        setIsActivePlayer,
+        isActivePlayerRef,
         onlineGameIdRef,
         API_URL_REF,
         thisPlayerMoveCounter,

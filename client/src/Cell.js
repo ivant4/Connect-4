@@ -3,7 +3,6 @@ import { useGameContext } from './GameContext';
 import { isLegalMove } from './GameLogic';
 import { useOnlineGameContext } from './OnlineGameContext';
 
-
 const diskColour = {
     0: "empty",
     1: "player-one",
@@ -24,7 +23,7 @@ const Cell = ({cellState, cellIndex}) => {
 
     const {
         isOnline,
-        isActivePlayer,
+        isActivePlayerRef,
         thisPlayerMoveCounter,
         setThisPlayerMoveCounter
     } = useOnlineGameContext();
@@ -51,14 +50,16 @@ const Cell = ({cellState, cellIndex}) => {
     };
 
     const selectNewDiskCol = async() => {
-        if (isOnline && !isActivePlayer) return; // do nothing if you are not the active player
+        if (isOnline && !isActivePlayerRef.current) return; // do nothing if you are not the active player
         const colOfNewDisk = cellIndex % 7;
         if (isLegalMove(boardState, colOfNewDisk) && (!isGameOver)) {
             await setColOfNewDisk(colOfNewDisk);
-            setMoveCounter(moveCounter + 1);
-            if (isOnline && isActivePlayer) {
+            await setMoveCounter(moveCounter + 1);
+            // need to make sure board state is updated before the next line executed !
+            if (isOnline && isActivePlayerRef.current) {
+                isActivePlayerRef.current = false;
                 setThisPlayerMoveCounter(thisPlayerMoveCounter + 1);
-            } 
+            }
         }
     };
 

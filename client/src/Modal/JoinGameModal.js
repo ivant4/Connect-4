@@ -5,10 +5,10 @@ import axios from 'axios';
 
 const JoinGameModal = ({showJoinGameModal, setShowJoinGameModal}) => {
     const {
-        setIsActivePlayer,
         setIsOnline,
         API_URL_REF,
-        onlineGameIdRef
+        isActivePlayerRef,
+        onlineGameIdRef,
     } = useOnlineGameContext();
 
     const [isGameIdFormDisabled, setIsGameIdFormDisabled] = useState(false);
@@ -43,6 +43,7 @@ const JoinGameModal = ({showJoinGameModal, setShowJoinGameModal}) => {
                 );
                 if (response.status === 200) {
                     onlineGameIdRef.current = parseInt(gameIdInput);
+                    isActivePlayerRef.current = false;
                     setIsOnline(true);
                     closeJoinGameModal();
                 } else if (response.status === 400) {

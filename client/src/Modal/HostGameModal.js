@@ -7,7 +7,7 @@ import { useGameContext } from '../GameContext';
 // close the game while waiting the game does not delete the game in the database
 const HostGameModal = ({showHostGameModal, setShowHostGameModal}) => {
     const {
-        setIsActivePlayer,
+        isActivePlayerRef,
         setIsOnline,
         onlineGameIdRef,
         API_URL_REF
@@ -50,9 +50,11 @@ const HostGameModal = ({showHostGameModal, setShowHostGameModal}) => {
         }
         if (currentGameStatus === "playing") {
             // the other player has joined
-            await resetGame();
-            setIsActivePlayer(true);
-            setIsOnline(true);
+            isActivePlayerRef.current = true;
+            Promise.all([
+                resetGame(),
+                setIsOnline(true)
+            ]);
             closeHostGameModal();
         } else {
             // handle invalid game status

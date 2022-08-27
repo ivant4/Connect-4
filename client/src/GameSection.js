@@ -1,15 +1,11 @@
 import React, {useState} from 'react';
 import GameBoard from './GameBoard';
 import ColumnCursor from './ColumnCursor';
-import GameOverModal from './Modal/GameOverModal';
-import { useGameContext } from './GameContext';
+import GameOverModal from './Modal/GameOverModal'
 import Utility from './Utility';
+import OnlineGameOverModal from './Modal/OnlineGameOverModal';
 
 const GameSection = () => {
-    const {
-        activePlayerNum,
-        resetGame
-    } = useGameContext();
     return (
         <>
             <div className='game-section'>
@@ -19,8 +15,8 @@ const GameSection = () => {
                 </div>
                 <Utility/>
             </div>
+            <OnlineGameOverModal/>
             <GameOverModal/>
-            
         </>
     );
 };

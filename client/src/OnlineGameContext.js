@@ -16,20 +16,8 @@ const OnlineGameContextProvider = ({children}) => {
         moveCounter,
         setMoveCounter,
         resetGame,
+        isGameOver
     } = useGameContext();
-
-    const resetOnlineGame = async() => {
-
-    };
-
-    const quitOnlineMode = async() => {
-        const response = await axios.patch(
-            `${API_URL_REF.current}/game-status/?player_status=quit&game_id=${onlineGameIdRef.current}`
-        );
-        onlineGameIdRef.current = null;
-        setIsOnline(false);
-        resetGame();
-    };
 
     const getBoardState = async() => {
         try {
@@ -83,19 +71,34 @@ const OnlineGameContextProvider = ({children}) => {
         const colOfNewDisk = findColOfNewDisk(boardState, updatedBoardState);
         isActivePlayerRef.current = true;
         await setColOfNewDisk(colOfNewDisk);
-        await setMoveCounter(2);
+        setMoveCounter(1);
     }, [isOnline]);
 
     useEffect(async() => {
         // uploads the new move and waits for the other player
         if (!isOnline || isActivePlayerRef.current) return;
         await setBoardState();
+        if (isGameOver) return;
         const updatedBoardState = await getUpdatedBoardState();
         const colOfNewDisk = findColOfNewDisk(boardState, updatedBoardState);
         isActivePlayerRef.current = true;
         await setColOfNewDisk(colOfNewDisk);
-        await setMoveCounter(moveCounter + 1);
+        setMoveCounter(moveCounter + 1);
     }, [boardState]);
+
+    const resetOnlineGame = async() => {
+        // Note: when you reset, activePlayerNum = 1,
+        // need to make one player wait for the other player to make a move
+    };
+
+    const quitOnlineMode = async() => {
+        const response = await axios.patch(
+            `${API_URL_REF.current}/game-status/?player_status=quit&game_id=${onlineGameIdRef.current}`
+        );
+        onlineGameIdRef.current = null;
+        setIsOnline(false);
+        resetGame();
+    };
 
     return <OnlineGameContext.Provider value={{
         isOnline,

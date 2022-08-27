@@ -9,9 +9,7 @@ const GameOverModal = () => {
         resetGame,
     } = useGameContext();
 
-    const {
-        isOnline,
-    } = useOnlineGameContext();
+    const {isOnline} = useOnlineGameContext();
 
     return (
         <div className={`modal-container ${isGameOver && !isOnline && "is-open game-over-modal"}`}>
@@ -19,7 +17,6 @@ const GameOverModal = () => {
                 <h2>
                     Well played ! 
                     {
-
                         winningPlayerNum === 0 ? " It's a draw!":
                         ` Player ${winningPlayerNum} has won the game!`
                     }

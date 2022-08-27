@@ -18,7 +18,9 @@ const OnlineGameOverModal = () => {
         <div className={`modal-container ${isGameOver && isOnline && "is-open game-over-modal"}`}>
             <div className='modal-content'>
                 <h2>
-                    Well played! Would you like to play again ? 
+                    Well played! 
+                    {isActivePlayerRef.current === true? " " : " You won !"}  
+                    <br/>Would you like to play again ? 
                 </h2>
                 <button 
                     className='btn' 

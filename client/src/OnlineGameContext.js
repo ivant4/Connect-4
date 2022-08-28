@@ -1,7 +1,12 @@
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import { useGameContext, initialBoardState } from './GameContext';
-import {hasBoardStateChanged, findColOfNewDisk} from './GameLogic';
-import axios from 'axios';
+import {areBoardStatesTheSame, findColOfNewDisk} from './GameLogic';
+import {
+    getGameStatus,
+    getBoardState,
+    postUpdatedBoardState,
+    quitGameRequest
+} from './requestFunction';
 
 const OnlineGameContext = React.createContext();
 
@@ -19,72 +24,50 @@ const OnlineGameContextProvider = ({children}) => {
         isGameOver,
     } = useGameContext();
 
-    const getBoardState = async() => {
-        try {
-            const response = await axios.get(`${API_URL_REF.current}/board-state`, {
-                params: {
-                    "game_id": onlineGameIdRef.current
-                },
-            });
-            return response.data.boardState;
-        } catch (err) {
-            console.log(err);
-        }
-    };
-
-    const postUpdatedBoardState = async(boardState) => {
-        try {
-            await axios.patch(`${API_URL_REF.current}/board-state`, {
-                params: {
-                    "game_id": onlineGameIdRef.current
-                },
-                data: {
-                    boardState
-                }
-            });
-        } catch (err) {
-            console.log(err);
-        }
-    };
-
     const waitAndGetBoardState= () => {
         return new Promise(resolve => {
             setTimeout(async() => {
-                const currentGameStatus = await getBoardState();
+                const currentGameStatus = await getBoardState(
+                    API_URL_REF.current, 
+                    onlineGameIdRef.current
+                );
                 resolve(currentGameStatus);
             }, 500);
         });
     };
 
-    const getUpdatedBoardState = async(boardState) => {
-        let latestBoardState = await getBoardState();
-        while (!hasBoardStateChanged(boardState, latestBoardState)) {
+    const getLatestBoardState = async(boardState) => {
+        let latestBoardState = await getBoardState(
+            API_URL_REF.current, 
+            onlineGameIdRef.current
+        );
+        while (areBoardStatesTheSame(boardState, latestBoardState)) {
             latestBoardState = await waitAndGetBoardState();
             // if the game status changes to waiting the other player has quit
+            const latestGameStatus = await getGameStatus(API_URL_REF.current, onlineGameIdRef.current);
+            if (latestGameStatus === "waiting") quitOnlineMode();
         }
         return latestBoardState;
     };
 
     const waitForTheMoveOfActivePlayer = async(newMoveCounterVal, boardState) => {
-        const updatedBoardState = await getUpdatedBoardState(boardState);
-        console.log(boardState, updatedBoardState);
-        const colOfNewDisk = findColOfNewDisk(boardState, updatedBoardState);
+        const latestBoardState = await getLatestBoardState(boardState);
+        const colOfNewDisk = findColOfNewDisk(boardState, latestBoardState);
         isActivePlayerRef.current = true;
         await setColOfNewDisk(colOfNewDisk); 
-        setMoveCounter(newMoveCounterVal); //update localBoardState to updatedBoardState
+        setMoveCounter(newMoveCounterVal); //update localBoardState to latestBoardState
     };
 
     useEffect(async() => {
         // runs when it goes online and offline
         if (!isOnline || isActivePlayerRef.current) return;
-        console.log(initialBoardState);
         waitForTheMoveOfActivePlayer(1, initialBoardState);
     }, [isOnline]);
 
     useEffect(async() => {
         // uploads the new move and waits for the other player
         if (!isOnline || isActivePlayerRef.current || moveCounter === 0) return;
-        await postUpdatedBoardState(boardState);
+        await postUpdatedBoardState(API_URL_REF.current, onlineGameIdRef.current, boardState);
         if (isGameOver) return;
         waitForTheMoveOfActivePlayer(moveCounter + 1, boardState);
     }, [boardState]);
@@ -92,23 +75,22 @@ const OnlineGameContextProvider = ({children}) => {
     const resetOnlineGame = async() => {
         await resetGame();
         if (!isActivePlayerRef.current) {
-            // the winning player goes second
-            await postUpdatedBoardState(initialBoardState);
+            // the winning player goes second in the next game
+            await postUpdatedBoardState(API_URL_REF.current, onlineGameIdRef.current, initialBoardState);
             waitForTheMoveOfActivePlayer(1, initialBoardState);
         } else {
             isActivePlayerRef.current = false;
-            const isOtherPlayerPlaying = false;
+            let isOtherPlayerPlaying = false;
             while (!isOtherPlayerPlaying) {
-                const updatedBoardState = await getBoardState();
-                if (!hasBoardStateChanged(initialBoardState, updatedBoardState)) {
+                const latestBoardState = await getBoardState(
+                    API_URL_REF.current, 
+                    onlineGameIdRef.current
+                );
+                if (areBoardStatesTheSame(initialBoardState, latestBoardState)) {
                     isOtherPlayerPlaying = true;
                 }
-                const response = await axios.get(`${API_URL_REF.current}/game-status`, {
-                params: {
-                    "game_id": onlineGameIdRef.current
-                }
-            });
-                if (response.data.gameStatus === "waiting") {
+                const latestGameStatus = await getGameStatus(API_URL_REF.current, onlineGameIdRef.current);
+                if (latestGameStatus === "waiting") {
                     // the other player has quitted
                     quitOnlineMode();
                     return;
@@ -117,10 +99,9 @@ const OnlineGameContextProvider = ({children}) => {
             isActivePlayerRef.current = true;
         }
     };
+
     const quitOnlineMode = async() => {
-        const response = await axios.patch(
-            `${API_URL_REF.current}/game-status/?player_status=quit&game_id=${onlineGameIdRef.current}`
-        );
+        await quitGameRequest(API_URL_REF.current, onlineGameIdRef.current);
         onlineGameIdRef.current = null;
         await setIsOnline(false);
         resetGame();

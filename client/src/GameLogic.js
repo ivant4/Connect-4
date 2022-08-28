@@ -15,14 +15,15 @@ const findRowOfNewDisk = (boardState, col) => {
 };
 
 
-const hasBoardStateChanged = (oldBoardState, newBoardState) => {
+const areBoardStatesTheSame = (oldBoardState, newBoardState) => {
     for (let row = 0; row < 6; row++) {
         for (let col = 0; col < 7; col++) {
             if (oldBoardState[row][col] !== newBoardState[row][col]) {
-                return true;
+                return false;
             }
         }
     }
+    return true;
 };
 
 const findColOfNewDisk = (oldBoardState, newBoardState) => {
@@ -102,6 +103,6 @@ export {
     isLegalMove, 
     findRowOfNewDisk, 
     hasActivePlayerWon,
-    hasBoardStateChanged,
+    areBoardStatesTheSame,
     findColOfNewDisk
 };

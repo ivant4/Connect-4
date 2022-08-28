@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import CloseButton from '../Button/CloseButton';
 import { useOnlineGameContext } from '../OnlineGameContext';
-import axios from 'axios';
+import { joinGameRequest } from '../requestFunction';
 import { useGameContext } from '../GameContext';
 
 const JoinGameModal = ({showJoinGameModal, setShowJoinGameModal}) => {
@@ -23,7 +23,7 @@ const JoinGameModal = ({showJoinGameModal, setShowJoinGameModal}) => {
 
     const isGameIdInputValid = (gameIdInput) => {
         const gameId = parseInt(gameIdInput);
-        if (gameId >= 0 && gameId < 9999) return true;
+        if (gameId >= 0 && gameId <= 9999) return true;
         return false;
     };
 
@@ -40,11 +40,10 @@ const JoinGameModal = ({showJoinGameModal, setShowJoinGameModal}) => {
         const gameIdInput = gameIdRef.current.value;
         if (isGameIdInputValid(gameIdInput)) {
             try {
-                const response = await axios.patch(
-                    `${API_URL_REF.current}/game-status/?player_status=join&game_id=${parseInt(gameIdInput)}`, 
-                );
+                const gameId = parseInt(gameIdInput);
+                const response = await joinGameRequest(API_URL_REF.current, gameId);
                 if (response.status === 200) {
-                    onlineGameIdRef.current = parseInt(gameIdInput);
+                    onlineGameIdRef.current = gameId;
                     isActivePlayerRef.current = false;
                     Promise.all([
                         resetGame(),
@@ -85,6 +84,7 @@ const JoinGameModal = ({showJoinGameModal, setShowJoinGameModal}) => {
                     disabled={isGameIdFormDisabled}
                 />
                 <button 
+                    className='join-btn btn'
                     type="submit" 
                     id="game-id" 
                     disabled={isGameIdFormDisabled}

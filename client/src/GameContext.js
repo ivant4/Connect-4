@@ -51,8 +51,8 @@ const GameContextProvider = ({children}) => {
         await setIsGameOver(false); 
         // to prevent the gameover Modal from updating to an incorrect message
         setActivePlayerNum(1);
-        setBoardState(initialBoardState.map(elem => [...elem]));
         setMoveCounter(0);
+        await setBoardState(initialBoardState.map(elem => [...elem]));
         winningPlayerNum.current = 0;
         cellIndexOfNewDisk.current = undefined;
     };

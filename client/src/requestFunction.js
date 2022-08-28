@@ -13,7 +13,6 @@ const getGameStatus = async(API_URL, gameId) => {
     }
 };
 
-
 const getBoardState = async(API_URL, gameId) => {
     try {
         const response = await axios.get(`${API_URL}/board-state`, {
@@ -27,11 +26,11 @@ const getBoardState = async(API_URL, gameId) => {
     }
 };
 
-const postUpdatedBoardState = async(boardState) => {
+const postUpdatedBoardState = async(API_URL, gameId, boardState) => {
     try {
-        await axios.patch(`${API_URL_REF.current}/board-state`, {
+        await axios.patch(`${API_URL}/board-state`, {
             params: {
-                "game_id": onlineGameIdRef.current
+                "game_id": gameId
             },
             data: {
                 boardState
@@ -44,14 +43,14 @@ const postUpdatedBoardState = async(boardState) => {
 
 const joinGameRequest = async(API_URL, gameId) => {
     const response = await axios.patch(
-        `${API_URL_REF.current}/game-status/?player_status=join&game_id=${parseInt(gameIdInput)}`, 
+        `${API_URL}/game-status/?player_status=join&game_id=${gameId}`, 
     );
     return response;
 };
 
 const quitGameRequest = async(API_URL, gameId) => {
     const response = await axios.patch(
-        `${API_URL_REF.current}/game-status/?player_status=quit&game_id=${parseInt(gameIdInput)}`, 
+        `${API_URL}/game-status/?player_status=quit&game_id=${gameId}`, 
     );
     return response;
 };

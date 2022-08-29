@@ -1,6 +1,4 @@
 const mongoose = require("mongoose");
-
-
 /* 
  * The name of the database is entered as a part of the collection string 
  * as the first part of connection options. 

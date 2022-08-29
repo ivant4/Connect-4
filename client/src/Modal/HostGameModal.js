@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import CloseButton from '../Button/CloseButton';
-import axios from 'axios';
+import { getGameStatus, createNewOnlineGame } from '../RequestFunction';
 import { useOnlineGameContext } from '../OnlineGameContext';
 import { useGameContext } from '../GameContext';
 
@@ -16,30 +16,17 @@ const HostGameModal = ({showHostGameModal, setShowHostGameModal}) => {
 
     const closeHostGameModal = () => setShowHostGameModal(false);
 
-    const getGameStatus = async(gameId) => {
-        try {
-            const response = await axios.get(`${API_URL_REF.current}/game-status`, {
-                params: {
-                    "game_id": gameId
-                }
-            });
-            return response.data.gameStatus;
-        } catch (err) {
-            console.log(err);
-        }
-    };
-
     const waitAndGetGameStatus = () => {
         return new Promise(resolve => {
             setTimeout(async() => {
-                const currentGameStatus = await getGameStatus(onlineGameIdRef.current);
+                const currentGameStatus = await getGameStatus(API_URL_REF.current, onlineGameIdRef.current);
                 resolve(currentGameStatus);
             }, 500);
         });
     };
 
     const waitForPlayerToJoin = async(newGameId) => {
-        let currentGameStatus = await getGameStatus(newGameId);
+        let currentGameStatus = await getGameStatus(API_URL_REF.current, newGameId);
         while (currentGameStatus === "waiting") {
             currentGameStatus = await waitAndGetGameStatus();
         }
@@ -53,8 +40,7 @@ const HostGameModal = ({showHostGameModal, setShowHostGameModal}) => {
     };
 
     const hostNewGame = async() => {
-        const response = await axios.post(`${API_URL_REF.current}/game-status`);
-        const newGameId = response.data.gameId;
+        const newGameId = await createNewOnlineGame(API_URL_REF.current);
         onlineGameIdRef.current = newGameId;
         setShowNewGameId(true);
         waitForPlayerToJoin(newGameId);

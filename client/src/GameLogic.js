@@ -14,7 +14,6 @@ const findRowOfNewDisk = (boardState, col) => {
     }
 };
 
-
 const areBoardStatesTheSame = (oldBoardState, newBoardState) => {
     for (let row = 0; row < 6; row++) {
         for (let col = 0; col < 7; col++) {
@@ -35,11 +34,6 @@ const findColOfNewDisk = (oldBoardState, newBoardState) => {
         }
     }
 };
-
-
-
-
-
 
 const isWithinGameboard = (boardState, row, col) => {
     // check if the coordinate (row, col) is inside the gameboard dimension.

@@ -6,7 +6,7 @@ import {
     getBoardState,
     postUpdatedBoardState,
     quitGameRequest
-} from './requestFunction';
+} from './RequestFunction';
 
 const OnlineGameContext = React.createContext();
 
@@ -87,6 +87,7 @@ const OnlineGameContextProvider = ({children}) => {
                     onlineGameIdRef.current
                 );
                 if (areBoardStatesTheSame(initialBoardState, latestBoardState)) {
+                    // when the other player wants to play another game, they reset the boardstate
                     isOtherPlayerPlaying = true;
                 }
                 const latestGameStatus = await getGameStatus(API_URL_REF.current, onlineGameIdRef.current);

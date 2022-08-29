@@ -3,7 +3,6 @@ import { toggleDarkTheme } from '../DisplaySettingsController'
 import CloseButton from '../Button/CloseButton';
 import ToggleButton from '../Button/ToggleButton';
 
-
 const DisplayModal = ({ showDisplayModal, setShowDisplayModal }) => {
     return (
         <div className={`modal-container ${showDisplayModal && "is-open"}`}>

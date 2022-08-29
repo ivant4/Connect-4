@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import CloseButton from '../Button/CloseButton';
 import { useOnlineGameContext } from '../OnlineGameContext';
-import { joinGameRequest } from '../requestFunction';
+import { joinGameRequest } from '../RequestFunction';
 import { useGameContext } from '../GameContext';
 
 const JoinGameModal = ({showJoinGameModal, setShowJoinGameModal}) => {

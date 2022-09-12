@@ -9,7 +9,7 @@ const diskColour = {
     2: "player-two",
 };
 
-const Cell = ({cellState, cellIndex}) => {
+const Cell = ({ cellState, cellIndex }) => {
     const {
         boardState,
         setColOfNewDisk, 
@@ -27,8 +27,9 @@ const Cell = ({cellState, cellIndex}) => {
     } = useOnlineGameContext();
 
     const cellRef = useRef();
-    const isAnimating = cellIndexOfNewDisk === cellIndex;
+
     // renders one of new disk or fixed disk
+    const isAnimating = cellIndexOfNewDisk === cellIndex;
 
     const updateNewDiskAnimation = () => {
         // sets the top margin and animation duration of the falling-disk animation 

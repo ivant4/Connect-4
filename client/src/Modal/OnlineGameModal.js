@@ -4,7 +4,7 @@ import CloseButton from '../Button/CloseButton';
 import HostGameModal from './HostGameModal';
 import JoinGameModal from './JoinGameModal';
 
-const OnlineGameModal = ({showOnlineGameModal, setShowOnlineGameModal}) => {
+const OnlineGameModal = ({ showOnlineGameModal, setShowOnlineGameModal }) => {
     const [showHostGameModal, setShowHostGameModal] = useState(false);
     const [showJoinGameModal, setShowJoinGameModal] = useState(false);
 

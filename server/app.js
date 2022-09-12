@@ -14,7 +14,7 @@ const errorHandlerMiddleware = require("./middleware/errorHandler");
 const routeNotFoundMiddleware = require("./middleware/routeNotFound");
 
 // enable cors(cross origin resource sharing) for the client requests
-app.use(cors())
+app.use(cors());
 
 // parse request body to json 
 app.use(express.json());

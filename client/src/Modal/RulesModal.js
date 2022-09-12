@@ -1,7 +1,7 @@
 import React from 'react';
 import CloseButton from '../Button/CloseButton';
 
-const RulesModal = ({ showRulesModal, setShowRulesModal}) => {
+const RulesModal = ({ showRulesModal, setShowRulesModal }) => {
     return (
         <div className={`modal-container ${showRulesModal && "is-open"}`}>
             <div className='modal-content'>

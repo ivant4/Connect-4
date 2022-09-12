@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import GameBoard from './GameBoard';
 import ColumnCursor from './ColumnCursor';
 import GameOverModal from './Modal/GameOverModal'

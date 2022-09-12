@@ -1,4 +1,4 @@
-const {gameModel, isValidBoardState} = require("../models/game");
+const { gameModel, isValidBoardState } = require("../models/game");
 
 const initialBoardState = [];
 for (let i = 0; i < 6; i++) {
@@ -122,7 +122,6 @@ const updateGameStatus = async (req, res, next) => {
         next(err); 
     }
 };
-
 
 module.exports = {
     createNewGame,

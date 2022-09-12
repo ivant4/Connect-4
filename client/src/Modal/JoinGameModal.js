@@ -4,7 +4,7 @@ import { useOnlineGameContext } from '../OnlineGameContext';
 import { joinGameRequest } from '../RequestFunction';
 import { useGameContext } from '../GameContext';
 
-const JoinGameModal = ({showJoinGameModal, setShowJoinGameModal}) => {
+const JoinGameModal = ({ showJoinGameModal, setShowJoinGameModal }) => {
     const {
         setIsOnline,
         API_URL_REF,

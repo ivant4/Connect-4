@@ -1,6 +1,6 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useGameContext, initialBoardState } from './GameContext';
-import {areBoardStatesTheSame, findColOfNewDisk} from './GameLogic';
+import { areBoardStatesTheSame, findColOfNewDisk } from './GameLogic';
 import {
     getGameStatus,
     getBoardState,
@@ -10,7 +10,7 @@ import {
 
 const OnlineGameContext = React.createContext();
 
-const OnlineGameContextProvider = ({children}) => {
+const OnlineGameContextProvider = ({ children }) => {
     const [isOnline, setIsOnline] = useState(false);
     const isActivePlayerRef = useRef(); 
     const onlineGameIdRef = useRef();

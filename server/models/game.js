@@ -43,5 +43,5 @@ const gameSchema = new mongoose.Schema({
         required: [true, "The game status is not provided !"]
     }
 });
-const gameModel = mongoose.model('games', gameSchema)
+const gameModel = mongoose.model('games', gameSchema);
 module.exports = {gameModel, isValidBoardState};

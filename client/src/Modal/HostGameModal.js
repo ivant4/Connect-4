@@ -1,10 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import CloseButton from '../Button/CloseButton';
 import { getGameStatus, createNewOnlineGame } from '../RequestFunction';
 import { useOnlineGameContext } from '../OnlineGameContext';
 import { useGameContext } from '../GameContext';
 
-const HostGameModal = ({showHostGameModal, setShowHostGameModal}) => {
+const HostGameModal = ({ showHostGameModal, setShowHostGameModal }) => {
     const {
         isActivePlayerRef,
         setIsOnline,
